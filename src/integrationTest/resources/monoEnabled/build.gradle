@@ -1,0 +1,10 @@
+plugins {
+    id 'io.github.frontrider.godle'
+}
+
+godle{
+    downloadConfig{
+        mono = true
+        godotVersion = godot_version
+    }
+}
