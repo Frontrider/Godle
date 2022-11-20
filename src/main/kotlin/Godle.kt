@@ -1,8 +1,8 @@
 package io.github.frontrider.godle
 
-import fi.linuxbox.gradle.download.Download
 import fi.linuxbox.gradle.download.DownloadPlugin
 import io.github.frontrider.godle.dsl.GodleExtension
+import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.GodotExec
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -10,6 +10,7 @@ import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import java.io.File
 
+@Suppress("Unused")
 class Godle : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create("godle", GodleExtension::class.java)
@@ -30,11 +31,7 @@ class Godle : Plugin<Project> {
             println("Current version: ${extension.getDownloadConfig().godotVersion.get()}")
             val downloadConfig = extension.getDownloadConfig()
 
-            val hasMono = downloadConfig.mono.get()
-            val version = downloadConfig.godotVersion.get()
-            val classifier = downloadConfig.classifier.get()
             val compressed = downloadConfig.isCompressed.get()
-            val downloadPath = "${project.buildDir.absolutePath}/$GodotCacheFolder/"
             val storePath = "${project.buildDir.absolutePath}/$GodotFolder/"
 
             project.tasks.create("cleanGodotAddons", Delete::class.java) {
@@ -44,31 +41,10 @@ class Godle : Plugin<Project> {
                     group = "godle"
                 }
             }
-            val godotDownloadTask = it.tasks.create("godotDownload", Download::class.java) { download ->
+            val godotDownloadTask = it.tasks.create("godotDownload", GodotDownload::class.java) { download ->
                 with(download) {
                     description = "Downloads the configured godot version."
                     group = "godle"
-                    from.set(extension.getDownloadURL())
-                    to.set(
-                        File(
-                            if (hasMono) {
-                                "${downloadPath}/Godot_mono_V${version}_$classifier"
-                            } else {
-                                "${downloadPath}/Godot_V${version}_$classifier"
-                            } + if (compressed) {
-                                ".zip"
-                            } else {
-                                ""
-                            }
-                        )
-                    )
-                    doFirst {
-                        println("downloading godot from ${from.get()}")
-                    }
-                    //IF we already downloaded then this is up-to-date.
-                    outputs.upToDateWhen {
-                        to.get().asFile.exists()
-                    }
                 }
             }
             val godotExtractTask = it.tasks.create("godotExtract", Copy::class.java) { copy ->
@@ -87,14 +63,28 @@ class Godle : Plugin<Project> {
                     if (compressed) {
                         from(it.zipTree(godotDownloadTask.to.get()))
                     } else {
+                        fileMode = 754
                         from(godotDownloadTask.to.get())
                     }
                     destinationDir = File(storePath)
                 }
             }
 
+            //IF a build task exists, then we depend on it.
+            //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided.
+            //THIS WILL BE TREATED AS A CONVENTION! IF the build task exists, then it will run!
+            val build = project.tasks.findByPath("build")
+
             it.tasks.create("godotEditor", GodotExec::class.java) { exec ->
+
                 with(exec) {
+                    //IF a build task exists, then depend on it.
+                    //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided to godot.
+                    //THIS WILL BE TREATED AS A CONVENTION! Anything running together with the build task, will be used!
+                    if(build != null){
+                        this.dependsOn(build)
+                    }
+
                     description = "Launch the godot editor"
                     group = "godle"
                     args("--editor")
@@ -107,6 +97,10 @@ class Godle : Plugin<Project> {
 
             it.tasks.create("godotRunGame", GodotExec::class.java) { exec ->
                 with(exec) {
+                    if(build != null){
+                        this.dependsOn(build)
+                    }
+
                     description = "Launch the game in the current project"
                     group = "application"
                     dependsOn(godotExtractTask)

@@ -3,13 +3,13 @@ package io.github.frontrider.godle.dsl
 import io.github.frontrider.godle.*
 import io.github.frontrider.godle.dsl.addon.GodotAddonDependencyContainer
 import io.github.frontrider.godle.dsl.execution.ExecutionConfig
+import org.apache.commons.lang3.SystemUtils
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Nested
-import java.io.File
 import javax.inject.Inject
 
 /**
@@ -69,7 +69,21 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory,v
         if (classifier == ClassifierLinux32 && hasMono) {
             classifier = ClassifierLinux32Mono
         }
-        val downloadURL = downloadConfig.downloadURL.get()
+
+        val downloadURL =
+            when {
+                SystemUtils.IS_OS_MAC -> {
+                    downloadConfig.macDownloadURL.get()
+                }
+                SystemUtils.IS_OS_WINDOWS -> {
+                    downloadConfig.windowsDownloadURL.get()
+                }
+                //we default to linux if we had no idea what the system is.
+                else -> {
+                    downloadConfig.linuxDownloadURL.get()
+                }
+            }
+
         if (downloadURL.isNotEmpty()) {
             println("Download url set, getting godot from $downloadURL")
             return downloadURL

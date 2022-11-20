@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "1.0-SNAPSHOT"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -50,8 +50,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
 }
 pluginBundle{
-    vcsUrl= "<uri to project source repository>"
+    vcsUrl= "https://github.com/Frontrider/Godle"
     website = vcsUrl
+
     tags = listOf("game development","godot")
 }
 
@@ -61,6 +62,7 @@ gradlePlugin {
     plugins {
         create("godle") {
             id = group.toString()
+            displayName = "Godle"
             implementationClass = "io.github.frontrider.godle.Godle"
             description = "Plugin to manage small tasks around plugins, like addons and the godot binary itself."
         }
@@ -71,7 +73,7 @@ gradlePlugin {
 
 publishing {
     publications {
-        create<MavenPublication>("maven"){
+        create<MavenPublication>("pluginMaven"){
             groupId = project.group.toString()
             artifactId = project.name
             version = project.version.toString()

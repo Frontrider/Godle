@@ -2,7 +2,6 @@ package io.github.frontrider.godle.dsl
 
 import io.github.frontrider.godle.*
 import org.apache.commons.lang3.SystemUtils
-import org.gradle.api.internal.model.DefaultObjectFactory
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import javax.inject.Inject
@@ -40,7 +39,9 @@ abstract class GodotDownloadConfig @Inject constructor(objectFactory: ObjectFact
             }
         }
     )
-    //If the full url needs to be overridden. IF set everything else is ignored.
-    val downloadURL: Property<String>  = objectFactory.property(String::class.java).convention("")
+    //If the full url needs to be overridden. IF set for the current platform, then the other configs are ignored.
+    val linuxDownloadURL: Property<String>  = objectFactory.property(String::class.java).convention("")
+    val windowsDownloadURL: Property<String>  = objectFactory.property(String::class.java).convention("")
+    val macDownloadURL: Property<String>  = objectFactory.property(String::class.java).convention("")
     val isCompressed: Property<Boolean> = objectFactory.property(Boolean::class.java).convention(true)
 }

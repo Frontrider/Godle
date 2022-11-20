@@ -5,6 +5,7 @@ plugins {
 
 godle{
     downloadConfig{
-        downloadURL = "https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_win32.exe.zip"
+        windowsDownloadURL = "https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_win32.exe.zip"
+        linuxDownloadURL = "https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_win32.exe.zip"
     }
 }

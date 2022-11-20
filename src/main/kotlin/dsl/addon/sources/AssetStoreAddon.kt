@@ -8,18 +8,22 @@ import java.io.File
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.github.frontrider.godle.dsl.GodleExtension
 import io.github.frontrider.godle.dsl.configureAsGodleInternal
 import kong.unirest.Unirest
 import kong.unirest.UnirestException
 import org.gradle.api.tasks.Copy
-import java.net.UnknownHostException
 
 class AssetStoreAddon(val id: String, addonConfig: AddonConfig, project: Project) : GodotAddon(addonConfig, project) {
 
     override fun init() {
         val internalName = getAddonInternalName()
         try {
-            val response = Unirest.get("https://godotengine.org/asset-library/api/asset/$id").asString()
+            val extension = project.extensions.getByName("godle") as GodleExtension
+            val downloadConfig = extension.getDownloadConfig()
+            val assetStoreURL = downloadConfig.godotAssetStoreBaseURL.get()
+
+            val response = Unirest.get("$assetStoreURL/asset/$id").asString()
             val objectMapper = ObjectMapper().registerKotlinModule()
             //being gitlike is the default behavior, as most addons come from git repositories.
 
