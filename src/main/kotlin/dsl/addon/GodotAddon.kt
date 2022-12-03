@@ -11,7 +11,6 @@ import java.io.File
 /**
  * Declares a godot addon dependency
  * */
-@Suppress("LeakingThis")
 abstract class GodotAddon(val addonConfig: AddonConfig, val project: Project) {
     lateinit var targetFolder: String
     lateinit var downloadFolder: String
@@ -19,31 +18,41 @@ abstract class GodotAddon(val addonConfig: AddonConfig, val project: Project) {
 
     //a common root task that can depend on every other task.
     fun configure() {
-        targetFolder = project.buildDir.absolutePath + "/godle/addons/${getAddonInternalName()}"
-        downloadFolder = project.buildDir.absolutePath + "/godle/temp/addon/${getAddonInternalName()}"
-        rootTaskName = godleAddonsTaskName + getAddonInternalName()
-        //the addon folder must be initialized here.
-        addonConfig.sourceFolder = targetFolder
+        val extension = project.extensions.getByType(GodleExtension::class.java)
+        val manageAddons = extension.manageAddons
 
-        val rootTask = project.tasks.create(rootTaskName) {
-            it.configureAsGodleInternal()
+        //do nothing if we're not managing the addons.
+        if (!manageAddons) {
+            return
         }
 
-        project.tasks.getByName(godleAddonsTaskName).dependsOn(rootTask)
+        project.afterEvaluate {
+            targetFolder = project.buildDir.absolutePath + "/godle/addons/${getAddonInternalName()}"
+            downloadFolder = project.buildDir.absolutePath + "/godle/temp/addon/${getAddonInternalName()}"
+            rootTaskName = godleAddonsTaskName + getAddonInternalName()
+            //the addon folder must be initialized here.
+            addonConfig.sourceFolder = targetFolder
 
-        init()
-        addonConfig.init()
-        createFolder(File(targetFolder))
-        createFolder(File(downloadFolder))
-        //This copy is the last task we do, everything else is set up to run before it.
-        project.tasks.create("installGodotAddon${getAddonInternalName()}", Copy::class.java) {
-            with(it) {
-                configureAsGodleInternal()
-                //uses the copyspec from the addon config.
-                with(addonConfig.copySpec)
-                destinationDir = File(project.extensions.getByType(GodleExtension::class.java).godotRoot.get().asFile.absolutePath+"/addons/")
+            val rootTask = project.tasks.create(rootTaskName) {
+                it.configureAsGodleInternal()
             }
-            rootTask.finalizedBy(it)
+
+            project.tasks.getByName(godleAddonsTaskName).dependsOn(rootTask)
+
+            init()
+            addonConfig.init()
+            createFolder(File(targetFolder))
+            createFolder(File(downloadFolder))
+            //This copy is the last task we do, everything else is set up to run before it.
+            project.tasks.create("installGodotAddon${getAddonInternalName()}", Copy::class.java) {
+                with(it) {
+                    configureAsGodleInternal()
+                    //uses the copyspec from the addon config.
+                    with(addonConfig.copySpec)
+                    destinationDir = File(extension.godotRoot.get().asFile.absolutePath + "/addons/")
+                }
+                rootTask.finalizedBy(it)
+            }
         }
     }
 

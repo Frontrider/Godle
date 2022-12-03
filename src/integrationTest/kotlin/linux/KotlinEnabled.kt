@@ -1,7 +1,6 @@
 package linux
 
-import ScriptTypeArgumentProvider
-import assertContainsGodotInformation
+import ScriptTypeAndKotlinVersionsArgumentProvider
 import assertExists
 import createBuildFile
 import doRun
@@ -14,20 +13,16 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import java.io.File
 
 @EnabledOnOs(OS.LINUX)
-class WindowsClassifier {
+class KotlinEnabled {
 
     @ParameterizedTest
-    @ArgumentsSource(ScriptTypeArgumentProvider::class)
-    fun `With classifier set to windows 64`(postfix: String, @TempDir tempDir: File){
-        "classifierSet".createBuildFile(postfix, tempDir)
-        val result = doRun(tempDir, listOf("godotExtract"), "--stacktrace")
-        val output = result.output
+    @ArgumentsSource(ScriptTypeAndKotlinVersionsArgumentProvider::class)
+    fun `With kotlin enabled`(postfix: String, version: String, @TempDir tempDir: File){
+        "kotlinEnabled".createBuildFile(postfix, tempDir)
+        doRun(tempDir, listOf("godotVersion"), "--stacktrace","-Pgodot_version=$version")
         assertAll(
             {
-                output.assertContainsGodotInformation("3.5")
-            },
-            {
-                File(tempDir.absolutePath + "/build/godle/temp/godot/Godot_V3.5_win64.exe.zip").assertExists("download zip file is missing!")
+                File(tempDir.absolutePath + "/build/godle/temp/godot/godot.zip").assertExists("download zip file is missing!")
             },
             {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("downloaded version folder missing!")
@@ -40,9 +35,8 @@ class WindowsClassifier {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("godot cache folder missing!")
             },
             {
-                File(tempDir.absolutePath + "/build/godot/Godot_v3.5-stable_win64.exe").assertExists("executable is missing!")
+                File(tempDir.absolutePath + "/build/godot/godot.x11.opt.tools.64").assertExists("executable is missing!")
             }
         )
     }
-
 }

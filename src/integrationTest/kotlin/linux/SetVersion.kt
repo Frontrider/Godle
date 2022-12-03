@@ -1,7 +1,6 @@
 package linux
 
 import ScriptTypeAndVersionsArgumentProvider
-import ScriptTypeArgumentProvider
 import assertContainsGodotInformation
 import assertExists
 import createBuildFile
@@ -29,7 +28,7 @@ class SetVersion {
             output.assertContainsGodotInformation(version)
         },
             {
-                File(tempDir.absolutePath + "/build/godle/temp/godot/Godot_V${version}_x11.64.zip").assertExists("download zip file is missing!")
+                File(tempDir.absolutePath + "/build/godle/temp/godot/godot.zip").assertExists("download zip file is missing!")
             },
             {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("downloaded version folder missing!")

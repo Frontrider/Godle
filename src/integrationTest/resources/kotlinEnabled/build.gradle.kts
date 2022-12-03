@@ -1,12 +1,11 @@
-import io.github.frontrider.godle.dsl.versioning.asGodot
-
 //We check that the plugin does not crash without setting anything.
+import io.github.frontrider.godle.dsl.versioning.`asKotlin-jvm`
 
 plugins {
     id("io.github.frontrider.godle")
 }
 val godot_version:String by project
 
-godle {
-    asGodot(godot_version)
+godle{
+    `asKotlin-jvm`(godot_version)
 }

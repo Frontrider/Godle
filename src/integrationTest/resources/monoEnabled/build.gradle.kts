@@ -1,4 +1,5 @@
 //We check that the plugin does not crash without setting anything.
+import io.github.frontrider.godle.dsl.versioning.asMono
 
 plugins {
     id("io.github.frontrider.godle")
@@ -6,8 +7,5 @@ plugins {
 val godot_version:String by project
 
 godle{
-    downloadConfig{
-        mono.set(true)
-        godotVersion.set(godot_version)
-    }
+    asMono(godot_version)
 }

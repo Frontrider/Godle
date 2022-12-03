@@ -1,9 +1,10 @@
 package io.github.frontrider.godle.dsl
 
-import io.github.frontrider.godle.*
+import io.github.frontrider.godle.DefaultGodotVersion
+import io.github.frontrider.godle.GodotAssetStoreURL
 import io.github.frontrider.godle.dsl.addon.GodotAddonDependencyContainer
-import io.github.frontrider.godle.dsl.execution.ExecutionConfig
-import org.apache.commons.lang3.SystemUtils
+import io.github.frontrider.godle.dsl.versioning.GodotVersion
+import io.github.frontrider.godle.dsl.versioning.godot
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
@@ -15,29 +16,28 @@ import javax.inject.Inject
 /**
  *  the DSL to control the way the plugin interacts with Godot.
  * */
-abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory,val project: Project) {
+@Suppress("unused")
+abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, val project: Project) {
     //set to true, if we want to enable and disable addons automatically.
     //this edits the project.godot file in the same folder as build.gradle
-    val manageAddons: Property<Boolean> = objectFactory.property(Boolean::class.java).convention(true)
+    var manageAddons: Boolean = true
 
     //set to true to include the companion gradle addon for godot, it includes a panel to manage gradle tasks.
-    val enableGodotAddon: Property<Boolean> = objectFactory.property(Boolean::class.java).convention(true)
+    var enableGodotAddon: Boolean = false
 
     //if set to true, the plugin should gitignore the addons it downloaded.
-    val enableAddonsGitignore: Property<Boolean> = objectFactory.property(Boolean::class.java).convention(true)
+    var enableAddonsGitignore: Boolean = false
 
-    //if set to true, godot will remove any undeclared addons inside the addon folder.
-    val cleanUndeclaredAddons: Property<Boolean> = objectFactory.property(Boolean::class.java).convention(true)
+    //if set to true, godot will remove all addons before downloading new ones.
+    //by default, it is enabled together with addon management.
+    var clearAddonsBeforeInstall = true
+
+    var godotAssetStoreBaseURL: String = GodotAssetStoreURL
+
+    val version: Property<GodotVersion> = objectFactory.property(GodotVersion::class.java).convention(godot(DefaultGodotVersion))
 
     //the root where the godot project lives. Defaults to the root folder.
     val godotRoot: RegularFileProperty = objectFactory.fileProperty().convention { project.rootDir }
-
-    @Nested
-    abstract fun getDownloadConfig(): GodotDownloadConfig
-
-    open fun downloadConfig(action: Action<in GodotDownloadConfig>) {
-        action.execute(getDownloadConfig())
-    }
 
     //DSL for godot addons.
     @Nested
@@ -47,51 +47,9 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory,v
         action.execute(getAddons())
     }
 
-    //DSL for godot addons.
-    @Nested
-    abstract fun getExecution(): ExecutionConfig
-
-    open fun execution(action: Action<in ExecutionConfig>) {
-        action.execute(getExecution())
+    val env = HashMap<String, String>()
+    fun env(key: String, value: String) {
+        env[key] = value
     }
 
-    fun getDownloadURL(): String {
-
-        val downloadConfig = getDownloadConfig()
-        val version = downloadConfig.godotVersion.get()
-        val baseUrl = downloadConfig.godotDownloadBaseURL.get()
-        var classifier = downloadConfig.classifier.get()
-        val hasMono = downloadConfig.mono.get()
-        //a fix for the different linux classifiers between windows and linux.
-        if (classifier == ClassifierLinux64 && hasMono) {
-            classifier = ClassifierLinux64Mono
-        }
-        if (classifier == ClassifierLinux32 && hasMono) {
-            classifier = ClassifierLinux32Mono
-        }
-
-        val downloadURL =
-            when {
-                SystemUtils.IS_OS_MAC -> {
-                    downloadConfig.macDownloadURL.get()
-                }
-                SystemUtils.IS_OS_WINDOWS -> {
-                    downloadConfig.windowsDownloadURL.get()
-                }
-                //we default to linux if we had no idea what the system is.
-                else -> {
-                    downloadConfig.linuxDownloadURL.get()
-                }
-            }
-
-        if (downloadURL.isNotEmpty()) {
-            println("Download url set, getting godot from $downloadURL")
-            return downloadURL
-        }
-        return if (hasMono) {
-            monoUrlTemplate
-        } else {
-            baseUrlTemplate
-        }.format(baseUrl, version, version, classifier)
-    }
 }

@@ -1,7 +1,6 @@
 package linux
 
 import ScriptTypeAndVersionsArgumentProvider
-import ScriptTypeArgumentProvider
 import assertContainsGodotInformation
 import assertExists
 import createBuildFile
@@ -14,9 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import java.io.File
 
-/**
- * This test should NOT include the version string, but the mono version is structured completely differently from the normal one.
- * */
 @EnabledOnOs(OS.LINUX)
 class MonoEnabled {
 
@@ -31,7 +27,7 @@ class MonoEnabled {
                 output.assertContainsGodotInformation(version)
             },
             {
-                File(tempDir.absolutePath + "/build/godle/temp/godot/Godot_mono_V${version}_x11.64.zip").assertExists("download zip file is missing!")
+                File(tempDir.absolutePath + "/build/godle/temp/godot/godot.zip").assertExists("download zip file is missing!")
             },
             {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("downloaded version folder missing!")

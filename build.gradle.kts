@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.2.0"
+version = "0.3.0"
 
 repositories {
     mavenCentral()
@@ -22,6 +22,7 @@ addExtendsFromRelation("integrationTestImplementation","testImplementation")
 addExtendsFromRelation("functionalTestImplementation","testImplementation")
 
 dependencies {
+
     implementation(gradleApi())
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
@@ -49,6 +50,7 @@ dependencies {
     testImplementation("org.junit.platform:junit-platform-runner:1.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
 }
+
 pluginBundle{
     vcsUrl= "https://github.com/Frontrider/Godle"
     website = vcsUrl

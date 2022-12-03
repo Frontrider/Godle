@@ -16,6 +16,7 @@ import javax.inject.Inject
  *
  * Each addon can be declared with or without an addon config.
  * */
+@Suppress("unused")
 abstract class GodotAddonDependencyContainer @Inject constructor(
     val objectFactory: ObjectFactory,
     val project: Project
@@ -24,10 +25,20 @@ abstract class GodotAddonDependencyContainer @Inject constructor(
     @Internal
     val dependencies = LinkedList<GodotAddon>()
 
+    init{
+        val extension = project.extensions.getByName("godle") as GodleExtension
+        //If the addon is enabled, create the configuration for it.
+        if(extension.enableGodotAddon){
+            byURL("https://github.com/Frontrider/Godle-Godot-Addon/archive/refs/heads/master.zip"){
+                isGitLike = true
+            }
+        }
+    }
+
     //creates a dependency from the assetlib
     //title is only used to make the api readable
+    @Suppress("UNUSED_PARAMETER")
     fun byId(title: String, id: Int): GodotAddon {
-        val godleExtension = project.extensions.getByType(GodleExtension::class.java)
         val assetStoreAddon =
             AssetStoreAddon(id.toString(), objectFactory.newInstance(AddonConfig::class.java), project)
         dependencies.add(assetStoreAddon)
@@ -35,6 +46,7 @@ abstract class GodotAddonDependencyContainer @Inject constructor(
         return assetStoreAddon
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun byId(title: String, id: Int, action: AddonConfig.() -> Unit): GodotAddon {
         val addonConfig = objectFactory.newInstance(AddonConfig::class.java)
         addonConfig.action()

@@ -7,36 +7,20 @@ import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
 
+@Suppress("LeakingThis")
 abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor?) :Download(workerExecutor) {
 
     init {
         val extension = project.extensions.getByName("godle") as GodleExtension
-        val downloadConfig = extension.getDownloadConfig()
-
-        val hasMono = downloadConfig.mono.get()
-        val version = downloadConfig.godotVersion.get()
-        val classifier = downloadConfig.classifier.get()
-        val compressed = downloadConfig.isCompressed.get()
         val downloadPath = "${project.buildDir.absolutePath}/$GodotCacheFolder/"
 
-        from.set(extension.getDownloadURL())
-        to.set(
-            File(
-                if (hasMono) {
-                    "${downloadPath}/Godot_mono_V${version}_$classifier"
-                } else {
-                    "${downloadPath}/Godot_V${version}_$classifier"
-                } + if (compressed) {
-                    ".zip"
-                } else {
-                    ""
-                }
-            )
-        )
+        from.set(extension.version.get().getDownloadURL())
+        println("downloading godot from: ${from.get()}")
+        to.set(File(downloadPath,"godot.zip"))
         //IF we already downloaded then this is up-to-date.
         outputs.upToDateWhen {
             to.get().asFile.exists()
         }
-
+        extension.version.get().downloadTask(this)
     }
 }

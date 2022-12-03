@@ -8,8 +8,6 @@ import doRun
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.condition.EnabledOnOs
-import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
@@ -28,7 +26,7 @@ class NoConfig {
                 output.assertContainsGodotInformation("3.5")
             },
             {
-                File(tempDir.absolutePath + "/build/godle/temp/godot/Godot_V3.5_x11.64.zip").assertExists("download zip file is missing!")
+                File(tempDir.absolutePath + "/build/godle/temp/godot/godot.zip").assertExists("download zip file is missing!")
             },
             {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("downloaded version folder missing!")
@@ -41,7 +39,7 @@ class NoConfig {
                 File(tempDir.absolutePath + "/build/godot/").assertExists("godot cache folder missing!")
             },
             {
-                File(tempDir.absolutePath + "/build/godot/Godot_v3.5-stable_x11.64").assertExists("executable is missing!")
+                File(tempDir.absolutePath + "/build/godot/Godot_v3.5.1-stable_x11.64").assertExists("executable is missing!")
             }, {
                 Assertions.assertEquals(
                     TaskOutcome.SUCCESS,

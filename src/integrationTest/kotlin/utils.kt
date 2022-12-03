@@ -60,18 +60,6 @@ class ScriptTypeArgumentProvider : ArgumentsProvider {
     }
 }
 
-class ScriptTypeAndNameArgumentProvider : ArgumentsProvider {
-    override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
-        val arguments = LinkedList<Arguments>()
-        for (postfix in postFixes) {
-            for (script in configuredScripts) {
-                arguments.add(Arguments.of(postfix, script))
-            }
-        }
-        return arguments.stream()
-    }
-}
-
 class ScriptTypeAndVersionsArgumentProvider : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
         val arguments = LinkedList<Arguments>()
@@ -84,13 +72,22 @@ class ScriptTypeAndVersionsArgumentProvider : ArgumentsProvider {
     }
 }
 
+class ScriptTypeAndKotlinVersionsArgumentProvider : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+        val arguments = LinkedList<Arguments>()
+        for (postfix in postFixes) {
+            for (version in kotlinVersions) {
+                arguments.add(Arguments.of(postfix, version))
+            }
+        }
+        return arguments.stream()
+    }
+}
+
+
 val postFixes = listOf("gradle.kts", "gradle")
 
 //3.4 returns 255 as the error code when calling it with "--version", therefore it can not be supported properly. It will fail tests when it downloaded and ran successfully.
 val versions = listOf("3.5","3.5.1")
 
-val classifiers = listOf(
-    "universal", "x11.64", "x11.32", "win64.exe", "win32.exe"
-)
-
-val configuredScripts = listOf("classifierSet")
+val kotlinVersions = listOf("0.5.0-3.5.0","0.5.1-3.5.1")

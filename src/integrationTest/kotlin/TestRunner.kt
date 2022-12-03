@@ -16,16 +16,4 @@ class TestRunner {
         output.assertContains("Godot information:","Header not printed")
         output.assertContains("Current version: 3.5","Godot version not printed")
     }
-
-    @ParameterizedTest
-    @ArgumentsSource(ScriptTypeArgumentProvider::class)
-    fun `set download url to a fixed url`(postfix: String, @TempDir tempDir: File) {
-
-        "downloadURLSet".createBuildFile(postfix, tempDir)
-        //run the tasks we want
-        val result =doRun(tempDir, listOf("tasks", "buildEnvironment"), "--stacktrace")
-        val output = result.output
-        output.assertContainsGodotInformation("3.5")
-        output.assertContains("Download url set, getting godot from https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_win32.exe.zip","Godot url was not printed out")
-    }
 }

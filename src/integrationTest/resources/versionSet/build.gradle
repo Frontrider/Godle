@@ -1,10 +1,9 @@
+import io.github.frontrider.godle.dsl.versioning.VersionsKt
 //We check that the plugin does not crash without setting anything.
 plugins {
     id 'io.github.frontrider.godle'
 }
 
 godle{
-    downloadConfig{
-        godotVersion = godot_version
-    }
+    version = VersionsKt.godot(godle,godot_version)
 }
