@@ -24,8 +24,9 @@ configure<GodleExtension>{
         //downloaded from an url to a zip file
         byURL("https://github.com/Frontrider/Godot-Scene-Browser/archive/refs/heads/master.zip"){
             //zip files from git repos have a special structure that is handled by the plugin.
+            //It will only copy whatever is inside the addons folder of the repository.
             isGitLike = true
-            //a full copyspec is available for anything that is custom.
+            //a full copyspec is available for anything that needs more than that.
             copySpec
         }
 
