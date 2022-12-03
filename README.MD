@@ -64,3 +64,35 @@ configure<GodleExtension>{
 }
 
 ```
+
+
+# Executing Godot.
+
+## Godot binary
+
+The `GodotExec` task can be used to run the currently downloaded godot binary with custom arguments. The plugin uses this class to run the editor and the game from gradle. 
+
+```kotlin
+tasks.create("godot_script", GodotExec::class.java) {
+    args("your","arguments","to","godot")
+}
+```
+
+
+## Scripts
+
+Godot scripts can be executed with the `GodotScriptExec` task type.
+This extends from `GodotExec`, provides a shorthand to run scripts.
+
+```kotlin
+
+tasks.create("godot_script",GodotScriptExec::class.java){
+    //a file pointing at your script.
+    script =file("<path_to_your_script>")
+    //set it to false, to show godot's window
+    headless = true
+    //anything that works on a regular `Exec` task should work here as well. 
+    group= "application"
+}
+
+```

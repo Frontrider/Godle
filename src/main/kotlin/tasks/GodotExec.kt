@@ -23,6 +23,7 @@ open class GodotExec : Exec() {
         } else {
             commandLine(godotExecutable)
         }
+
         extension.version.get().execTask(this)
     }
 }

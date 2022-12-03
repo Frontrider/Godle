@@ -16,7 +16,6 @@ class Godle : Plugin<Project> {
 
         project.afterEvaluate {
 
-
             val extension = project.extensions.getByName("godle") as GodleExtension
 
             val godotAddonTask = project.tasks.create(godleAddonsTaskName) {
@@ -69,7 +68,7 @@ class Godle : Plugin<Project> {
                     group = "godle"
                 }
                 if (extension.getAddons().clearAddonsBeforeInstall) {
-                    godotAddonTask.dependsOn(this)
+                    godotAddonTask.dependsOn(it)
                 }
             }
 
