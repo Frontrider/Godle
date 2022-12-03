@@ -19,29 +19,33 @@ plugins {
 
 configure<GodleExtension>{
     addons {
-        //downloaded from the asset store
-        byId("Metadata Inspector", 637)
-        //downloaded from an url to a zip file
-        byURL("https://github.com/Frontrider/Godot-Scene-Browser/archive/refs/heads/master.zip"){
-            //zip files from git repos have a special structure that is handled by the plugin.
-            //It will only copy whatever is inside the addons folder of the repository.
-            isGitLike = true
-            //a full copyspec is available for anything that needs more than that.
-            copySpec
-        }
+        //add a gitignore file into the addons folder, so it won't be committed into the repository.
+        enableAddonsGitignore = true
+        //where addons should be dowbloaded from, by default uses the godot asset library.
+        //MUST point to an api compatible with godot's asset library!
+        assetStoreURL = "https://godotengine.org/asset-library/api/"
+        
+        //set it to false, to avoid cleaning the addons folder
+        cleanUndeclaredAddons.set(true)
+        
+        install {
+            //downloaded from the asset store
+            byId("Metadata Inspector", 637)
+            //downloaded from an url to a zip file
+            byURL("https://github.com/Frontrider/Godot-Scene-Browser/archive/refs/heads/master.zip") {
+                //zip files from git repos have a special structure that is handled by the plugin.
+                //It will only copy whatever is inside the addons folder of the repository.
+                isGitLike = true
+                //a full copyspec is available for anything that needs more than that.
+                copySpec
+            }
 
-        //godle comes with an optional godot addon that can be enabled. 
-        //https://github.com/Frontrider/Godle-Godot-Addon/
-        godleAddon()
+            //godle comes with an optional godot addon that can be enabled. 
+            //https://github.com/Frontrider/Godle-Godot-Addon/
+            godleAddon()
+        }
     }
     
-    //add a gitignore file into the addons folder, so it won't be committed into the repository.
-    enableAddonsGitignore = true
-    //set it to false, to avoid cleaning the addons folder
-    cleanUndeclaredAddons.set(true)
-    //you can set the url that the plugin should download assets from.
-    //MUST point to an api compatible with godot's asset library!
-    godotAssetStoreBaseURL = "https://godotengine.org/asset-library/api/"
     //configure the godot version of your choice.
     version = `kotlin-jvm`("0.5.1-3.5.1")
     

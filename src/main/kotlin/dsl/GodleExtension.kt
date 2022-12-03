@@ -1,7 +1,6 @@
 package io.github.frontrider.godle.dsl
 
 import io.github.frontrider.godle.DefaultGodotVersion
-import io.github.frontrider.godle.GodotAssetStoreURL
 import io.github.frontrider.godle.dsl.addon.GodotAddonExtension
 import io.github.frontrider.godle.dsl.versioning.GodotVersion
 import io.github.frontrider.godle.dsl.versioning.godot
@@ -18,8 +17,6 @@ import javax.inject.Inject
  * */
 @Suppress("unused")
 abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, val project: Project) {
-    var godotAssetStoreBaseURL: String = GodotAssetStoreURL
-
     val version: Property<GodotVersion> = objectFactory.property(GodotVersion::class.java).convention(godot(DefaultGodotVersion))
 
     //the root where the godot project lives. Defaults to the root folder.
