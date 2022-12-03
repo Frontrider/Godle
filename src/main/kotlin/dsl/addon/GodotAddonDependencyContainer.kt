@@ -1,6 +1,5 @@
 package io.github.frontrider.godle.dsl.addon
 
-import io.github.frontrider.godle.dsl.GodleExtension
 import io.github.frontrider.godle.dsl.addon.sources.AssetStoreAddon
 import io.github.frontrider.godle.dsl.addon.sources.FileAddon
 import io.github.frontrider.godle.dsl.addon.sources.URLAddon
@@ -24,16 +23,6 @@ abstract class GodotAddonDependencyContainer @Inject constructor(
 
     @Internal
     val dependencies = LinkedList<GodotAddon>()
-
-    init{
-        val extension = project.extensions.getByName("godle") as GodleExtension
-        //If the addon is enabled, create the configuration for it.
-        if(extension.enableGodotAddon){
-            byURL("https://github.com/Frontrider/Godle-Godot-Addon/archive/refs/heads/master.zip"){
-                isGitLike = true
-            }
-        }
-    }
 
     //creates a dependency from the assetlib
     //title is only used to make the api readable
@@ -102,5 +91,12 @@ abstract class GodotAddonDependencyContainer @Inject constructor(
 
     fun byFile(file: String, action: AddonConfig.() -> Unit): GodotAddon {
         return byFile(File(file), action)
+    }
+
+    //install the godle addon into godot.
+    fun godleAddon(){
+        byURL("https://github.com/Frontrider/Godle-Godot-Addon/archive/refs/heads/master.zip"){
+            isGitLike = true
+        }
     }
 }

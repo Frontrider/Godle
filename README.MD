@@ -28,13 +28,12 @@ configure<GodleExtension>{
             //a full copyspec is available for anything that is custom.
             copySpec
         }
+
+        //godle comes with an optional godot addon that can be enabled. 
+        //https://github.com/Frontrider/Godle-Godot-Addon/
+        godleAddon()
     }
     
-    //disable addon handling.
-    manageAddons = true
-    //godle comes with an optional godot addon that can be enabled. 
-    //https://github.com/Frontrider/Godle-Godot-Addon/
-    enableGodotAddon = false
     //add a gitignore file into the addons folder, so it won't be committed into the repository.
     enableAddonsGitignore = true
     //set it to false, to avoid cleaning the addons folder

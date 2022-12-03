@@ -18,16 +18,11 @@ class Godle : Plugin<Project> {
 
 
             val extension = project.extensions.getByName("godle") as GodleExtension
-            val manageAddons = extension.manageAddons
 
             val godotAddonTask = project.tasks.create(godleAddonsTaskName) {
                 with(it) {
-                    description = if(manageAddons){
-                        "Download configured addons"
-                    }else{
-                        "Download configured addons (disabled)"
-                    }
-                    enabled = manageAddons
+
+                    description = "Download configured addons"
 
                     group = "godle"
                 }
@@ -64,22 +59,19 @@ class Godle : Plugin<Project> {
                 }
             }
 
-            if(manageAddons) {
-                project.tasks.create("cleanGodotAddons", Delete::class.java) {
-                    with(it) {
-                        delete(
-                            project.objects.fileProperty()
-                                .convention { File(extension.godotRoot.asFile.get(), "addons") })
-                        description =
-                            "Clean the addon folder. This is an optional step, you have to set up your task dependencies for this."
-                        group = "godle"
-                    }
-                    if(extension.clearAddonsBeforeInstall) {
-                        godotAddonTask.dependsOn(this)
-                    }
+            project.tasks.create("cleanGodotAddons", Delete::class.java) {
+                with(it) {
+                    delete(
+                        project.objects.fileProperty()
+                            .convention { File(extension.godotRoot.asFile.get(), "addons") })
+                    description =
+                        "Clean the addon folder. This is an optional step, you have to set up your task dependencies for this."
+                    group = "godle"
+                }
+                if (extension.getAddons().clearAddonsBeforeInstall) {
+                    godotAddonTask.dependsOn(this)
                 }
             }
-
 
             //IF a build task exists, then we depend on it.
             //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided.
@@ -134,7 +126,7 @@ class Godle : Plugin<Project> {
                 }
             }
 
-            if(extension.enableAddonsGitignore) {
+            if (extension.getAddons().enableAddonsGitignore) {
                 File(project.rootDir, ".gitignore").writeText(
                     """
                 *

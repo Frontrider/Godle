@@ -19,12 +19,6 @@ abstract class GodotAddon(val addonConfig: AddonConfig, val project: Project) {
     //a common root task that can depend on every other task.
     fun configure() {
         val extension = project.extensions.getByType(GodleExtension::class.java)
-        val manageAddons = extension.manageAddons
-
-        //do nothing if we're not managing the addons.
-        if (!manageAddons) {
-            return
-        }
 
         project.afterEvaluate {
             targetFolder = project.buildDir.absolutePath + "/godle/addons/${getAddonInternalName()}"

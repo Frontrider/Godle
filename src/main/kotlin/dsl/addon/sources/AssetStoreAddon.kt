@@ -21,7 +21,7 @@ class AssetStoreAddon(val id: String, addonConfig: AddonConfig, project: Project
         try {
             val extension = project.extensions.getByName("godle") as GodleExtension
 
-            val assetStoreURL = extension.godotAssetStoreBaseURL
+            val assetStoreURL = extension.getAddons().assetStoreURL
 
             val response = Unirest.get("$assetStoreURL/asset/$id").asString()
             val objectMapper = ObjectMapper().registerKotlinModule()
