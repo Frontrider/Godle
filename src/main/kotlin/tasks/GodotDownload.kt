@@ -8,7 +8,7 @@ import java.io.File
 import javax.inject.Inject
 
 @Suppress("LeakingThis")
-abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor?) :Download(workerExecutor) {
+abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor) :Download(workerExecutor) {
 
     init {
         val extension = project.extensions.getByName("godle") as GodleExtension

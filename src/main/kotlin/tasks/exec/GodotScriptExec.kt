@@ -1,4 +1,4 @@
-package io.github.frontrider.godle.tasks
+package io.github.frontrider.godle.tasks.exec
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -11,17 +11,27 @@ import javax.inject.Inject
 @Suppress("unused")
 open class GodotScriptExec @Inject constructor() : GodotExec() {
 
-    @InputFile
+    @InputFile()
     var script: File? = null
 
     @Input
+    var scriptArgs = ArrayList<String>()
+
+    fun scriptArgs(vararg arg: String) {
+        scriptArgs.addAll(arg)
+    }
+
+    @Input
     var headless = true
+
     init {
-        project.afterEvaluate {
-            if(headless){
+        doFirst {
+            args("--script", script!!.relativeTo(workingDir))
+            if (headless) {
                 args("--no-window")
             }
-            args("--script", script!!.absolutePath)
+            args("--debug")
+            args(scriptArgs)
         }
     }
 }

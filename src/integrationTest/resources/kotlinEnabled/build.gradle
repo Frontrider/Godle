@@ -4,5 +4,5 @@ plugins {
 import io.github.frontrider.godle.dsl.versioning.VersionsKt
 
 godle {
-    version = VersionsKt["kotlin-jvm"](godle,godot_version,true)
+    version = VersionsKt.kotlinJVM(godle,godot_version,true)
 }

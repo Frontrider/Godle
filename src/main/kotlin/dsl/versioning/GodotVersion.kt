@@ -1,7 +1,7 @@
 package io.github.frontrider.godle.dsl.versioning
 
 import io.github.frontrider.godle.tasks.GodotDownload
-import io.github.frontrider.godle.tasks.GodotExec
+import org.gradle.process.ExecSpec
 
 /**
  * Contains all the information needed for downloads and execution.
@@ -21,7 +21,7 @@ data class GodotVersion(
     val os: SUPPORTED_OS,
     val bit: String,
     val downloadTask:(GodotDownload)->Unit = {},
-    val execTask:(GodotExec)->Unit = {},
+    val execTask:(ExecSpec)->Unit = {},
 ) {
     fun templateString(input:String): String {
         return input

@@ -3,7 +3,8 @@ Plugin to manage godot dependencies through gradle.
 Primarily meant to be used together with https://godot-kotl.in/, but it also supports several other binaries as well, and contains all the tools you need to take advantage of Gradle while using Godot.
 
 The JVM module of godot is based on kotlin, so this plugin is also designed around the kotlin DSL, but is compatible with groovy.
-The plugin itself needs java 9, godot kotlin requires 11.
+
+The plugin itself needs java 9 and gradle 7.4 ([uses the test report aggregation feature](https://docs.gradle.org/7.4/userguide/test_report_aggregation_plugin.html)), godot kotlin requires java 11.
 
 # Installation
 

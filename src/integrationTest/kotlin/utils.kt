@@ -37,13 +37,14 @@ fun String.createBuildFile(postfix: String, tempDir: File) {
     println(fileContents)
 }
 
-fun doRun(projectDir: File, tasks: List<String>, vararg args: String): BuildResult {
+fun doRun(projectDir: File, tasks: List<String>, vararg args: String, fail: Boolean = false): BuildResult {
 
-    val result = GradleRunner.create()
+    val builder = GradleRunner.create()
         .withProjectDir(projectDir)
         .withArguments(tasks + args.asList())
         .withPluginClasspath()
-        .build()
+
+    val result = if (fail) builder.buildAndFail() else builder.build()
 
     val output = result.output
     print(output)
@@ -88,6 +89,6 @@ class ScriptTypeAndKotlinVersionsArgumentProvider : ArgumentsProvider {
 val postFixes = listOf("gradle.kts", "gradle")
 
 //3.4 returns 255 as the error code when calling it with "--version", therefore it can not be supported properly. It will fail tests when it downloaded and ran successfully.
-val versions = listOf("3.5","3.5.1")
+val versions = listOf("3.5", "3.5.1")
 
-val kotlinVersions = listOf("0.5.0-3.5.0","0.5.1-3.5.1")
+val kotlinVersions = listOf("0.5.0-3.5.0", "0.5.1-3.5.1")
