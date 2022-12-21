@@ -6,7 +6,7 @@ import org.gradle.api.Project
 import java.io.File
 
 /**
- * This addon just takes in the path to the addon's folder, then uses it as a target. No downloads included.
+ * This addon takes in the path to the addon's folder, then uses it as a target. No downloads included, just a copy..
  * */
 class FileAddon(val file: File, addonConfig: AddonConfig, project: Project) : GodotAddon(addonConfig, project)  {
 

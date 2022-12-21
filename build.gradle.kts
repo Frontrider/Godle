@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.9.0"
+version = "0.10.0"
 
 repositories {
     mavenCentral()
@@ -191,7 +191,7 @@ openApiGenerate {
         )
     )
 }
-val classes: Task by tasks
+val compileKotlin: Task by tasks
 
 //generate license information.
 class LicenseData(
@@ -212,10 +212,10 @@ class License(
     var isOsiApproved: Boolean?=null
 )
 
-tasks.create("generateLicenseData") {
-    classes.dependsOn(this)
+val generateLicenseData= tasks.create("generateLicenseData") {
+    compileKotlin.dependsOn(this)
     doFirst {
-        val text = File(project.rootDir, "licenses.json").readText()
+        val text = File(project.rootDir, "/src/main/resources/licenses.json").readText()
         val licenseData = Gson().fromJson(text, LicenseData::class.java)
         file("$generatedLicenseSource/License.kt").apply {
             parentFile.mkdirs()
@@ -263,3 +263,6 @@ tasks.create("generateLicenseData") {
         }
     }
 }
+
+
+compileKotlin.dependsOn("openApiGenerate")

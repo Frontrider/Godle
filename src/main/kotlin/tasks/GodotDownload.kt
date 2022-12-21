@@ -8,6 +8,9 @@ import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
 
+/**
+ * Downloads the godot binary.
+ * */
 @Suppress("LeakingThis")
 abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor) :Download(workerExecutor) {
 
@@ -22,6 +25,7 @@ abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor)
         outputs.upToDateWhen {
             to.get().asFile.exists()
         }
+        //post process the download task.
         extension.version.get().downloadTask(this)
     }
 }

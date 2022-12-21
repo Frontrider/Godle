@@ -4,6 +4,9 @@ import io.github.frontrider.godle.dsl.GodleExtension
 import org.gradle.api.Project
 import java.io.File
 
+/**
+ * Set up gdignores on folders that need it.
+ * */
 fun Project.ignores(){
     afterEvaluate {
 
@@ -17,7 +20,7 @@ fun Project.ignores(){
                 File(buildDir, ".gdignore").createNewFile()
             }
             //make the clean task also finish by ignoring the build folder.
-            //IF it actually exists in the 
+            //only apply it, if the clean task exists.
             ignoreBuild()
             tasks.findByPath("clean")?.apply {
                 //If the clean task does not exist, then we don't ignore the build folder.

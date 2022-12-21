@@ -3,6 +3,7 @@ package io.github.frontrider.godle
 import io.github.frontrider.godle.dsl.GodleExtension
 import io.github.frontrider.godle.initializers.ignores
 import io.github.frontrider.godle.initializers.initBaseGodot
+import io.github.frontrider.godle.initializers.initPublishing
 import io.github.frontrider.godle.initializers.initTesting
 import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
@@ -25,5 +26,6 @@ class Godle : Plugin<Project> {
         project.initBaseGodot()
         project.ignores()
         project.initTesting()
+        project.initPublishing()
     }
 }

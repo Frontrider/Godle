@@ -2,7 +2,9 @@
 
 package io.github.frontrider.godle.dsl.versioning
 
+import io.github.frontrider.godle.bit
 import io.github.frontrider.godle.dsl.GodleExtension
+import io.github.frontrider.godle.os
 
 
 //vanilla godot with no modules

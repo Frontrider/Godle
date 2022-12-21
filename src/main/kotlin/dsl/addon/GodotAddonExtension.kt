@@ -6,6 +6,9 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Nested
 import javax.inject.Inject
 
+/**
+ * Configure addon handling.
+ * */
 @Suppress("unused")
 abstract class GodotAddonExtension  @Inject constructor(
     val project: Project

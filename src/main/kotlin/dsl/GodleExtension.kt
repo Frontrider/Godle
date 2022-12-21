@@ -23,7 +23,9 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
     //the root where the godot project lives. Defaults to the root folder.
     val godotRoot: RegularFileProperty = objectFactory.fileProperty().convention { project.rootDir }
 
+    //set it to true, to ignore the build folder.
     var ignoreBuildFolder = true
+    //set it to true, to create a blank godot project in the godot root.
     var createBlankProject = true
 
     //DSL for godot addons.

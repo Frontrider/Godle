@@ -6,7 +6,7 @@ import java.io.File
 import javax.inject.Inject
 
 /**
- * executes a given GDScript file with the current downloaded godot.
+ * Executes a given GDScript file with the currently set godot version.
  * */
 @Suppress("unused")
 open class GodotScriptExec @Inject constructor() : GodotExec() {

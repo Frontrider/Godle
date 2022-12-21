@@ -2,6 +2,7 @@ package io.github.frontrider.godle.initializers
 
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
+import io.github.frontrider.godle.dsl.configureAsGodleInternal
 import io.github.frontrider.godle.dsl.versioning.MajorVersion
 import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
@@ -81,8 +82,10 @@ fun Project.initBaseGodot() {
         }
         val godotExtractTask = tasks.create("godotExtract", Copy::class.java) { copy ->
             with(copy) {
+
+                configureAsGodleInternal()
                 description = "Copies the godot binary to its storage folder"
-                group = "godle-internal"
+
                 //If the store exists, and is not empty then it is up-to-date.
                 outputs.upToDateWhen {
                     val target = File(storePath)

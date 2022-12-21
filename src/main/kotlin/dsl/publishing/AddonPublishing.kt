@@ -1,5 +1,8 @@
 package io.github.frontrider.godle.dsl.publishing
 
+import dsl.publishing.AddonType
+import dsl.publishing.AssetCategories
+import dsl.publishing.CompatVersion
 import godle.license.License
 import godle.license.MIT
 import godot.assets.model.AssetDetails.SupportLevelEnum
@@ -25,8 +28,10 @@ fun AddonPublishing.currentCommitHash(): String {
 
 
 class AddonPublishing @Inject constructor(objectFactory: ObjectFactory, val project: Project) {
+    //IF set then the plugin will try to update an existing asset(?)
+    var id = objectFactory.property(Int::class.java)
     var vcsUrl = objectFactory.property(String::class.java)
-    var category = objectFactory.property(String::class.java)
+    var category = AssetCategories.Tools
     var type = AddonType.ADDON
 
     //the download commit by default is always set to the last commit.
@@ -37,8 +42,9 @@ class AddonPublishing @Inject constructor(objectFactory: ObjectFactory, val proj
     //if download url is set, then we don't use the commit hash.
     var downloadURL = objectFactory.property(String::class.java)
     var license: License = MIT
-    var godotVersion = "3.5"
+    var godotVersion = CompatVersion.`3_5`
     var iconUrl = objectFactory.property(String::class.java)
+
     var issuesUrl = objectFactory.property(String::class.java).convention(Providers.changing {
         "$vcsUrl/issues"
     })

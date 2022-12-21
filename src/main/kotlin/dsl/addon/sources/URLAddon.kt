@@ -8,6 +8,10 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import java.io.File
 
+
+/**
+ * Downloads an addon from an url containing a zip file.
+ * */
 class URLAddon(val url: String, addonConfig: AddonConfig, project: Project) : GodotAddon(addonConfig, project) {
 
     override fun init() {

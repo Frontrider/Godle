@@ -1,19 +1,18 @@
 package io.github.frontrider.godle.dsl.addon.sources
 
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat
 import fi.linuxbox.gradle.download.Download
 import godot.assets.api.AssetsApi
 import godot.assets.invoker.ApiException
-import godot.assets.invoker.JSON
-import io.github.frontrider.godle.dsl.GodleExtension
 import io.github.frontrider.godle.dsl.addon.AddonConfig
 import io.github.frontrider.godle.dsl.addon.GodotAddon
 import io.github.frontrider.godle.dsl.configureAsGodleInternal
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import java.io.File
-import java.text.SimpleDateFormat
 
+/**
+ * Downloads an addon from the godot asset library.
+ * */
 class AssetStoreAddon(val id: String, addonConfig: AddonConfig, project: Project) : GodotAddon(addonConfig, project) {
     override fun init() {
         val internalName = getAddonInternalName()

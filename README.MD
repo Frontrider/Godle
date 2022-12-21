@@ -124,6 +124,7 @@ configure<GodleExtension> {
     publishing {
         //url to your git repository, the one you use from a browser, not the one ending in .git!
         vcsUrl.set("")
+        
         category.set("")
         //the type of this asset.
         type = AddonType.ADDON
@@ -140,9 +141,8 @@ configure<GodleExtension> {
         //godle will try to create the appropriate license files in the addons folder and the root folder.
         //the values are either objects inside the `godle.license` package, or `godle.license.License` instances.
         license = MIT
-        //the version of godot you are compatible with.
-        //this may become a set of fixed versions.
-        godotVersion = "3.5"
+        //the version of godot the addon is compatible with
+        godotVersion = CompatVersion.`3_5`
         //the asset's icon. This may 
         iconUrl.set("")
         //the default is vcsUrl/issues, link to your support page

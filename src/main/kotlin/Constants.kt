@@ -1,6 +1,7 @@
 package io.github.frontrider.godle
 
 import io.github.frontrider.godle.dsl.versioning.GodotVersion
+import org.apache.commons.lang3.SystemUtils
 
 
 //https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_osx.universal.zip
@@ -15,11 +16,13 @@ import io.github.frontrider.godle.dsl.versioning.GodotVersion
 
 const val DefaultGodotVersion = "3.5.1"
 const val GodotAssetStoreURL = "https://godotengine.org/asset-library/api/"
-const val TempFolder = "/godle/temp/"
+const val godleAddonsTaskName = "godleAddons"
+
+//Global cache folders.
 val GodotCacheFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot_cache" else "${System.getenv("HOME")}/.gradle/bin/godot_cache"
 val GodotFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/bin/godot"
 
-const val godleAddonsTaskName = "godleAddons"
+
 
 
 fun getGodotCache(version:GodotVersion): String {
@@ -28,4 +31,27 @@ fun getGodotCache(version:GodotVersion): String {
 
 fun getGodotFolder(version:GodotVersion): String {
     return "$GodotFolder/${version.cachedName}/"
+}
+
+//System type detection
+enum class SUPPORTED_OS{
+    LINUX,MAC,WINDOWS
+}
+
+val os = when {
+    SystemUtils.IS_OS_MAC -> {
+        SUPPORTED_OS.MAC
+    }
+
+    SystemUtils.IS_OS_WINDOWS -> {
+        SUPPORTED_OS.WINDOWS
+    }
+    //we default to linux if we had no idea what the system is.
+    else -> {
+        SUPPORTED_OS.LINUX
+    }
+}
+val bit = when(SystemUtils.OS_ARCH){
+    "x86"-> "32"
+    else-> "64"
 }

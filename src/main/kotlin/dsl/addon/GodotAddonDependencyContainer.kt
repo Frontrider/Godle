@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * DSL to contain different kinds of Godot addon dependencies.
  *
- * Each addon can be declared with or without an addon config.
+ * Each addon can be declared with or without additional configuration.
  * */
 @Suppress("unused")
 abstract class GodotAddonDependencyContainer @Inject constructor(

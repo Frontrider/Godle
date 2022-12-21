@@ -39,22 +39,26 @@ class GodotAddonPublish:DefaultTask() {
 
         val assetsApi = AssetsEditApi()
         val assetDetails = AuthenticatedAssetDetails().apply {
-            category = publishingConfig.category.get()
+            category = publishingConfig.category.categoryName
             description = publishingConfig.description
             cost = publishingConfig.license.licenseId
+
             if(publishingConfig.downloadURL.isPresent){
                 downloadUrl = publishingConfig.downloadURL.get()
             }else{
                 //download commit is always available
                 downloadCommit = publishingConfig.downloadCommit.get()
             }
+
+            type = publishingConfig.type.typeName
+            version = publishingConfig.versionString.get()
+
             author = login.username
             token = login.token!!
             description = publishingConfig.description
             browseUrl = publishingConfig.vcsUrl.get()
             issuesUrl = publishingConfig.issuesUrl.get()
             iconUrl = publishingConfig.issuesUrl.get()
-            this.downloadProvider
 
         }
         assetsApi.assetPost(assetDetails)
