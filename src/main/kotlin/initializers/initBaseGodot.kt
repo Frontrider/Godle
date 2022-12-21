@@ -42,26 +42,21 @@ fun Project.initBaseGodot() {
         File(project.rootDir, "editor.sh").apply {
             if (!exists()) {
                 writeText(
-                    """#!/bin/sh
-            ./gradlew godotEditor
-        """.trimIndent()
+                    "#!/bin/sh \n./gradlew godotEditor"
                 )
             }
         }
         File(project.rootDir, "editor.bat").apply {
             if (!exists()) {
                 writeText(
-                    """gradlew.bat godotEditor
-        """.trimIndent()
+                    "gradlew.bat godotEditor"
                 )
             }
         }
         File(project.rootDir, "game.sh").apply {
             if (!exists()) {
                 writeText(
-                    """#!/bin/sh
-            ./gradlew godotRunGame
-        """.trimIndent()
+                    "#!/bin/sh \n./gradlew godotRunGame"
                 )
             }
         }
