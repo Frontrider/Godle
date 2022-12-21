@@ -11,7 +11,7 @@ import org.gradle.process.ExecSpec
 fun initExec(project: Project,exec: ExecSpec){
     with(exec) {
         val extension = project.extensions.getByName("godle") as GodleExtension
-        val storePath = "${project.buildDir.absolutePath}/$GodotFolder"
+        val storePath = getGodotFolder(extension.version.get())
 
         val godotExecutable = storePath + "/" + extension.version.get().getBinaryPath()
         val workDir = extension.godotRoot.get().asFile

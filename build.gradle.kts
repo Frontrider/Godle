@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.8.12"
+version = "0.9.0"
 
 repositories {
     mavenCentral()
@@ -32,6 +32,7 @@ java {
         }
     }
 }
+
 kotlin {
     sourceSets {
         main {
@@ -51,6 +52,7 @@ addExtendsFromRelation("functionalTestImplementation", "testImplementation")
 val swaggerAnnotationsVersion = "1.5.22"
 val jacksonVersion = "2.13.4"
 val jakartaAnnotationVersion = "1.3.5"
+
 dependencies {
 
     implementation(gradleApi())
@@ -245,7 +247,7 @@ tasks.create("generateLicenseData") {
                 reference = "${it.reference}",
                 referenceNumber = ${it.referenceNumber},
                 isDeprecatedLicenseId = ${it.isDeprecatedLicenseId},
-                name = "${it.name!!.replace("\"","\\\"")}",
+                name = ${"\"\"\""+it.name+"\"\"\""},
                 licenseId = "${it.licenseId}",
                 isOsiApproved = ${it.isOsiApproved},
                 detailsUrl= "${it.detailsUrl}",

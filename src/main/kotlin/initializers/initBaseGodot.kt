@@ -3,6 +3,7 @@ package io.github.frontrider.godle.initializers
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
 import io.github.frontrider.godle.dsl.versioning.MajorVersion
+import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
@@ -23,28 +24,60 @@ fun Project.initBaseGodot() {
         println("Current version: ${version.version}")
 
         //If no project is found, create a blank one.
-        if(extension.createBlankProject){
+        if (extension.createBlankProject) {
             val file = File(extension.godotRoot.get().asFile, "project.godot")
-            if(!file.exists()){
+            if (!file.exists()) {
                 file.writeText("")
             }
         }
         //ignore the gradle wrapper's folder.
-        if(File(project.rootDir, "gradle/").exists()) {
+        if (File(project.rootDir, "gradle/").exists()) {
             val file = File(project.rootDir, "gradle/.gdignore")
             if (!file.exists()) {
                 file.writeText("")
             }
         }
+        //create runner scripts
+        // Not in a task, to make it less cumbersome.
+        File(project.rootDir, "editor.sh").apply {
+            if (!exists()) {
+                writeText(
+                    """#!/bin/sh
+            ./gradlew godotEditor
+        """.trimIndent()
+                )
+            }
+        }
+        File(project.rootDir, "editor.bat").apply {
+            if (!exists()) {
+                writeText(
+                    """gradlew.bat godotEditor
+        """.trimIndent()
+                )
+            }
+        }
+        File(project.rootDir, "game.sh").apply {
+            if (!exists()) {
+                writeText(
+                    """#!/bin/sh
+            ./gradlew godotRunGame
+        """.trimIndent()
+                )
+            }
+        }
+        File(project.rootDir, "game.bat").apply {
+            if (!exists()) {
+                writeText("call gradlew.bat godotRunGame")
+            }
+        }
 
-        val storePath = "${buildDir.absolutePath}/$GodotFolder/"
+        val storePath = "$GodotFolder/"
         val godotAddonTask = tasks.create(godleAddonsTaskName) {
             with(it) {
                 description = "Download configured addons"
                 group = "godle"
             }
         }
-
         val godotDownloadTask = tasks.create("godotDownload", GodotDownload::class.java) { download ->
             with(download) {
                 description = "Downloads the configured godot version."
@@ -68,7 +101,7 @@ fun Project.initBaseGodot() {
                 from(zipTree(godotDownloadTask.to))
                 fileMode = 500
 
-                destinationDir = File(storePath)
+                destinationDir = File(getGodotFolder(extension.version.get()))
             }
         }
 
@@ -132,7 +165,7 @@ fun Project.initBaseGodot() {
             MajorVersion.Godot3 -> {
                 tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
                     with(exec) {
-                        doFirst{
+                        doFirst {
                             mkdir("${project.buildDir.absolutePath}/generated/godot/")
                         }
                         if (build != null) {
@@ -149,13 +182,14 @@ fun Project.initBaseGodot() {
                     }
                 }
             }
+
             MajorVersion.Godot4 -> {
 
                 tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
                     with(exec) {
                         workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
 
-                        doFirst{
+                        doFirst {
                             mkdir(workingDir)
                         }
                         if (build != null) {
@@ -180,7 +214,7 @@ fun Project.initBaseGodot() {
                         }
                         workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
 
-                        doFirst{
+                        doFirst {
                             mkdir(workingDir)
                         }
                         description = "Generate gdextension headers."

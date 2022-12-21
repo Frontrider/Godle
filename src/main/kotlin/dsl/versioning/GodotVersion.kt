@@ -24,11 +24,13 @@ data class GodotVersion(
 
     val os: SUPPORTED_OS,
     val bit: String,
+    val cacheName:String,
 
     val downloadTask: (GodotDownload) -> Unit = {},
     val execTask: (ExecSpec) -> Unit = {},
     val majorVersion: MajorVersion = MajorVersion.Godot3
 ) {
+    val cachedName:String = templateString(cacheName)
     fun templateString(input: String): String {
         return input
             .replace("%version%", version)

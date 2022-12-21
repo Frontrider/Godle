@@ -3,7 +3,6 @@ package io.github.frontrider.godle.dsl
 import io.github.frontrider.godle.DefaultGodotVersion
 import io.github.frontrider.godle.dsl.addon.GodotAddonExtension
 import io.github.frontrider.godle.dsl.publishing.AddonPublishing
-import io.github.frontrider.godle.dsl.testing.TestSettings
 import io.github.frontrider.godle.dsl.versioning.GodotVersion
 import io.github.frontrider.godle.dsl.versioning.godot
 import org.gradle.api.Action
@@ -11,7 +10,6 @@ import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
 import javax.inject.Inject
 

@@ -3,6 +3,7 @@ package io.github.frontrider.godle.tasks
 import fi.linuxbox.gradle.download.Download
 import io.github.frontrider.godle.GodotCacheFolder
 import io.github.frontrider.godle.dsl.GodleExtension
+import io.github.frontrider.godle.getGodotCache
 import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
@@ -12,7 +13,7 @@ abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor)
 
     init {
         val extension = project.extensions.getByName("godle") as GodleExtension
-        val downloadPath = "${project.buildDir.absolutePath}/$GodotCacheFolder/"
+        val downloadPath = getGodotCache(extension.version.get())
 
         from.set(extension.version.get().getDownloadURL())
         println("downloading godot from: ${from.get()}")

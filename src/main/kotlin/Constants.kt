@@ -1,5 +1,7 @@
 package io.github.frontrider.godle
 
+import io.github.frontrider.godle.dsl.versioning.GodotVersion
+
 
 //https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_osx.universal.zip
 //https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_win64.exe.zip
@@ -14,7 +16,16 @@ package io.github.frontrider.godle
 const val DefaultGodotVersion = "3.5.1"
 const val GodotAssetStoreURL = "https://godotengine.org/asset-library/api/"
 const val TempFolder = "/godle/temp/"
-const val GodotCacheFolder = "$TempFolder/godot"
-const val GodotFolder = "godot"
+val GodotCacheFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot_cache" else "${System.getenv("HOME")}/.gradle/bin/godot_cache"
+val GodotFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/bin/godot"
 
 const val godleAddonsTaskName = "godleAddons"
+
+
+fun getGodotCache(version:GodotVersion): String {
+    return "$GodotCacheFolder/${version.cachedName}/"
+}
+
+fun getGodotFolder(version:GodotVersion): String {
+    return "$GodotFolder/${version.cachedName}/"
+}
