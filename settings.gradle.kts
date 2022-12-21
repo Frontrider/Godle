@@ -1,2 +1,2 @@
 
-rootProject.name = "godle"
+rootProject.name = "Godle, Godot plugin for Gradle"

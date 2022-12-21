@@ -1,4 +1,6 @@
-Plugin to manage godot dependencies through gradle.
+# Godle, Godot plugin for Gradle
+
+Plugin to manage Godot, and its dependencies through Gradle.
 
 Primarily meant to be used together with https://godot-kotl.in/, but it also supports several other binaries as well, and contains all the tools you need to take advantage of Gradle while using Godot.
 
@@ -22,9 +24,6 @@ configure<GodleExtension>{
     addons {
         //add a gitignore file into the addons folder, so it won't be committed into the repository.
         enableAddonsGitignore = true
-        //where addons should be dowbloaded from, by default uses the godot asset library.
-        //MUST point to an api compatible with godot's asset library!
-        assetStoreURL = "https://godotengine.org/asset-library/api/"
         
         //set it to false, to avoid cleaning the addons folder
         cleanUndeclaredAddons.set(true)
@@ -46,7 +45,9 @@ configure<GodleExtension>{
             godleAddon()
         }
     }
-    
+
+    //creates a blank project in the godotRoot folder.
+    createBlankProject = true
     //configure the godot version of your choice.
     version = `kotlin-jvm`("0.5.1-3.5.1")
     
@@ -66,8 +67,21 @@ configure<GodleExtension>{
 
 ```
 
+### C#
+Godle could integrate one of the available gradle plugins to aid with dependency management for c# projects. 
+https://plugins.gradle.org/search?term=dotnet
+
+I don't make any promises for this, as I don't code in c# myself, but I see that as something that might be useful.
+
+### Other languages
+IF there is a gradle support for the language that you're writing your addon in, (like there is for kotlin/jvm at the moment) then it might be possible to include settings for that as well.
+
+Godle can also try to support you either by doing the final steps like creating the `*.gdextension` file, or by organizing your external build tools.
+
+IF it is possible to use your language's tools without installing them (they can be used in portable fashion), then godle can try to set you up for it. The benefit is that we can guarantee that anyone who works with your project has the right versions for your setup.
 
 # Executing Godot.
+
 
 ## Godot binary
 
@@ -80,7 +94,8 @@ tasks.create("godot_script", GodotExec::class.java) {
 ```
 
 
-## Scripts
+
+## Script execution
 
 Godot scripts can be executed with the `GodotScriptExec` task type.
 This extends from `GodotExec`, provides a shorthand to run scripts.
@@ -97,3 +112,80 @@ tasks.create("godot_script",GodotScriptExec::class.java){
 }
 
 ```
+
+# Publishing to the asset store
+
+Godle will support addon publishing, but this feature is not available yet.
+
+This is the currently planned configuration for it.
+```kotlin
+configure<GodleExtension> {
+    //addon publishing won't be enabled until you call this method.
+    publishing {
+        //url to your git repository, the one you use from a browser, not the one ending in .git!
+        vcsUrl.set("")
+        category.set("")
+        //the type of this asset.
+        type = AddonType.ADDON
+        //the download commit by default is always set to the last commit of the current git repository.
+        //the plugin uses jgit to determine this.
+        downloadCommit
+        //The full description of your addon.
+        var description: String = """
+    The full description of your addon.
+    """.trimIndent()
+        //if download url is set, then we don't use the commit hash.
+        downloadURL.set("")
+        //godot has a list of licenses you can use, set to MIT by default!
+        //godle will try to create the appropriate license files when pu
+        license = MIT
+        //the version of godot you are compatible with.
+        //this may become a set of fixed versions.
+        godotVersion = "3.5"
+        //the asset's icon. This may 
+        iconUrl.set("")
+        //the default is vcsUrl/issues, link to your support page
+        issuesUrl.set("")
+        //support levels defined by the godot asset store, defaults to testing.
+        supportLevel = SupportLevelEnum.TESTING
+        //by default the addon's title is set to the project's name
+        //yes, the project's name in gradle can be a fully human readable name, the example is in this project.
+        title.set("")
+        //by default the addon's version is set to the project's version
+        versionString.set("")
+
+        isArchived = false
+        //your username and password that you use with the godot asset library
+        //DO NOT STORE IT IN YOUR BUILDSCRIPT/PROJECT!
+        credentials {
+            username = ""
+            password = ""
+        }
+    }
+}
+
+```
+
+# Default Tasks
+
+Godle provides a number of tasks to work with.
+
+- `cleanGodotAddons`: cleans the addon folder, so godle can download it again.
+- `godleAddons`: installs the currently configured addons
+- `godotDownload`: downloads the currently configured version of Godot.
+- `godotEditor`: runs the editor in the `godotRoot` folder (configured on the extension). It will open any projects in that folder.
+- `godotVersion`: prints the current Godot version.
+- `godotRunGame`: runs the game in the `godotRoot` folder (configured on the extension). It will open any projects in that folder.
+
+Godle can produce gdnative/gdextension bindings for the currently downloaded godot version.
+
+On Godot 3, use the `godotGenerateBindingJson` task to produce the json under `build/generated/godot/api.json`.
+
+On Godot 4, use the `godotGenerateBindingJson` task to produce the json under `build/generated/godot/extension_api.json`, or the `godotGenerateGDExtensionInterface` to create godot's header file under `build/generated/godot/gdnative_interface.h`
+
+This can be used to organize binding generation for that version of Godot.
+
+<br>
+<br>
+<br>
+Note for the gradle team for approval testing: the plugin without any configuration runs one of the later versions of godot 3.5, running the `godotEditor` task is enough to check that functionality, it should open the right version of the godot editor, with the created plank project skipping the project browser.

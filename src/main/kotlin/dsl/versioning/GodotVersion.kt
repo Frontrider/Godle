@@ -3,6 +3,10 @@ package io.github.frontrider.godle.dsl.versioning
 import io.github.frontrider.godle.tasks.GodotDownload
 import org.gradle.process.ExecSpec
 
+enum class MajorVersion {
+    Godot3, Godot4
+}
+
 /**
  * Contains all the information needed for downloads and execution.
  * Used as a common entry point for different installs with different engine modules.
@@ -20,23 +24,27 @@ data class GodotVersion(
 
     val os: SUPPORTED_OS,
     val bit: String,
-    val downloadTask:(GodotDownload)->Unit = {},
-    val execTask:(ExecSpec)->Unit = {},
+
+    val downloadTask: (GodotDownload) -> Unit = {},
+    val execTask: (ExecSpec) -> Unit = {},
+    val majorVersion: MajorVersion = MajorVersion.Godot3
 ) {
-    fun templateString(input:String): String {
+    fun templateString(input: String): String {
         return input
             .replace("%version%", version)
             .replace("%bit%", bit)
     }
+
     fun getDownloadURL(): String {
-        return when(os){
+        return when (os) {
             SUPPORTED_OS.LINUX -> templateString(linuxDownloadURL)
             SUPPORTED_OS.MAC -> templateString(macDownloadURL)
             SUPPORTED_OS.WINDOWS -> templateString(windowsDownloadURL)
         }
     }
+
     fun getBinaryPath(): String {
-        return when(os){
+        return when (os) {
             SUPPORTED_OS.LINUX -> templateString(linuxBinary)
             SUPPORTED_OS.MAC -> templateString(macBinary)
             SUPPORTED_OS.WINDOWS -> templateString(windowsBinary)

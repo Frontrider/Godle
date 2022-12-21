@@ -21,10 +21,6 @@ import java.io.File
 class Godle : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create("godle", GodleExtension::class.java)
-        //apply the aggregator plugin so we can merge the junit test reports produced by godot with the java reports.
-        project.apply{
-            it.plugin(TestReportAggregationPlugin::class.java)
-        }
 
         project.initBaseGodot()
         project.ignores()

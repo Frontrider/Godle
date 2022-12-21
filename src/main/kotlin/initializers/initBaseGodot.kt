@@ -2,6 +2,7 @@ package io.github.frontrider.godle.initializers
 
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
+import io.github.frontrider.godle.dsl.versioning.MajorVersion
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
@@ -14,19 +15,27 @@ import org.gradle.api.tasks.testing.AggregateTestReport
 import java.io.File
 
 fun Project.initBaseGodot() {
-    //configure the aggregator to merge the reports.
-    extensions.getByType(ReportingExtension::class.java).apply {
-        reports.create("testAggregateTestReport", AggregateTestReport::class.java) {
-            it.testType.set(TestSuiteType.UNIT_TEST)
-        }
-    }
-    //check should depend on the report merger.
-    tasks.findByPath("check")?.dependsOn("testAggregateTestReport")
 
     afterEvaluate {
         val extension = extensions.getByName("godle") as GodleExtension
         println("Godot information:")
-        println("Current version: ${extension.version.get().version}")
+        val version = extension.version.get()
+        println("Current version: ${version.version}")
+
+        //If no project is found, create a blank one.
+        if(extension.createBlankProject){
+            val file = File(extension.godotRoot.get().asFile, "project.godot")
+            if(!file.exists()){
+                file.writeText("")
+            }
+        }
+        //ignore the gradle wrapper's folder.
+        if(File(project.rootDir, "gradle/").exists()) {
+            val file = File(project.rootDir, "gradle/.gdignore")
+            if (!file.exists()) {
+                file.writeText("")
+            }
+        }
 
         val storePath = "${buildDir.absolutePath}/$GodotFolder/"
         val godotAddonTask = tasks.create(godleAddonsTaskName) {
@@ -45,7 +54,7 @@ fun Project.initBaseGodot() {
         val godotExtractTask = tasks.create("godotExtract", Copy::class.java) { copy ->
             with(copy) {
                 description = "Copies the godot binary to its storage folder"
-                group = "godle"
+                group = "godle-internal"
                 //If the store exists, and is not empty then it is up-to-date.
                 outputs.upToDateWhen {
                     val target = File(storePath)
@@ -118,6 +127,78 @@ fun Project.initBaseGodot() {
                 dependsOn(godotAddonTask)
             }
         }
+
+        when (version.majorVersion) {
+            MajorVersion.Godot3 -> {
+                tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
+                    with(exec) {
+                        doFirst{
+                            mkdir("${project.buildDir.absolutePath}/generated/godot/")
+                        }
+                        if (build != null) {
+                            this.dependsOn(build)
+                        }
+                        description = "generate gdnative bindings"
+                        group = "godle"
+
+                        args("--gdnative-generate-json-api")
+                        args("${project.buildDir.absolutePath}/generated/godot/api.json")
+                        dependsOn(godotExtractTask)
+                        dependsOn(godotDownloadTask)
+                        dependsOn(godotAddonTask)
+                    }
+                }
+            }
+            MajorVersion.Godot4 -> {
+
+                tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
+                    with(exec) {
+                        workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
+
+                        doFirst{
+                            mkdir(workingDir)
+                        }
+                        if (build != null) {
+                            this.dependsOn(build)
+                        }
+                        description = "Generate gdextension bindings json"
+                        group = "godle"
+
+                        isIgnoreExitValue = true
+                        args("--dump-extension-api")
+                        args("--no-window")
+                        dependsOn(godotExtractTask)
+                        dependsOn(godotDownloadTask)
+                        dependsOn(godotAddonTask)
+                    }
+                }
+
+                tasks.create("godotGenerateGdExtensionInterface", GodotExec::class.java) { exec ->
+                    with(exec) {
+                        if (build != null) {
+                            this.dependsOn(build)
+                        }
+                        workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
+
+                        doFirst{
+                            mkdir(workingDir)
+                        }
+                        description = "Generate gdextension headers."
+                        group = "godle"
+
+                        isIgnoreExitValue = true
+
+                        args("--dump-gdextension-interface")
+                        args("--no-window")
+
+                        dependsOn(godotExtractTask)
+                        dependsOn(godotDownloadTask)
+                        dependsOn(godotAddonTask)
+                    }
+                }
+            }
+        }
+
 
         tasks.create("godotVersion", GodotExec::class.java) { exec ->
             with(exec) {

@@ -11,11 +11,10 @@ open class GodotExec : Exec() {
     init {
         initExec(project, this)
         val task = this
-        doLast{
-            println("Godot task ran as: ")
-            println("ran in: "+task.workingDir.absolutePath)
+        doFirst{
+            println("Godot task running as: ")
+            println("runs in: "+task.workingDir.absolutePath)
             println(commandLine)
-            println(args)
         }
     }
 }

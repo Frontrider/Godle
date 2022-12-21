@@ -24,6 +24,26 @@ infix fun GodleExtension.asGodot(version: String) {
     this.version.set(godot(version))
 }
 
+infix fun GodleExtension.godot4Beta(version: String): GodotVersion {
+    return GodotVersion(
+        os = os,
+        bit = bit,
+        version = version,
+        linuxDownloadURL = "https://downloads.tuxfamily.org/godotengine/4.0/beta%version%/Godot_v4.0-beta%version%_linux.x86_%bit%.zip",
+        windowsDownloadURL = "https://downloads.tuxfamily.org/godotengine/4.0/beta%version%/Godot_v4.0-beta%version%winx%bit%.exe.zip",
+        macDownloadURL = "https://downloads.tuxfamily.org/godotengine/4.0/beta%version%/Godot_v4.0-beta%version%_macos.universal.zip",
+        linuxBinary = "Godot_v4.0-beta%version%_linux.x86_%bit%",
+        windowsBinary = "Godot_v4.0-beta%version%win%bit%.exe",
+        macBinary = "Godot.app/Contents/MacOS/Godot",
+        majorVersion = MajorVersion.Godot4
+    )
+}
+
+infix fun GodleExtension.asGodot4Beta(version: String){
+    this.version.set(godot4Beta(version))
+}
+
+
 //c# support
 fun GodleExtension.mono(version: String): GodotVersion {
     return GodotVersion(
