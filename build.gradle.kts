@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.8.11"
+version = "0.8.12"
 
 repositories {
     mavenCentral()
@@ -110,7 +110,7 @@ gradlePlugin {
             id = group.toString()
             displayName = "Godle"
             implementationClass = "io.github.frontrider.godle.Godle"
-            description = "Plugin to manage small tasks around plugins, like addons and the godot binary itself."
+            description = "Plugin to manage small tasks around godot, like addons and the godot binary itself."
         }
     }
     testSourceSets(functionalTest)
