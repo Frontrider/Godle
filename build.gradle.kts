@@ -122,7 +122,7 @@ publishing {
     publications {
         create<MavenPublication>("pluginMaven") {
             groupId = project.group.toString()
-            artifactId = project.name
+            artifactId ="godle"
             version = project.version.toString()
             from(components["java"])
         }
@@ -235,17 +235,17 @@ tasks.create("generateLicenseData") {
             )
         }
         licenseData.licenses.forEach {
-
-            file("$generatedLicenseSource/${it.licenseId}.kt").apply {
+            val fileName = it.licenseId!!.replace(".","_")
+            file("$generatedLicenseSource/${fileName}.kt").apply {
                 writeText(
                     """
             package godle.license
             
-            object `${it.licenseId}`:License(
+            object `${fileName}`:License(
                 reference = "${it.reference}",
                 referenceNumber = ${it.referenceNumber},
                 isDeprecatedLicenseId = ${it.isDeprecatedLicenseId},
-                name = "${it.name}",
+                name = "${it.name!!.replace("\"","\\\"")}",
                 licenseId = "${it.licenseId}",
                 isOsiApproved = ${it.isOsiApproved},
                 detailsUrl= "${it.detailsUrl}",

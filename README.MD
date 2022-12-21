@@ -137,7 +137,8 @@ configure<GodleExtension> {
         //if download url is set, then we don't use the commit hash.
         downloadURL.set("")
         //godot has a list of licenses you can use, set to MIT by default!
-        //godle will try to create the appropriate license files when pu
+        //godle will try to create the appropriate license files in the addons folder and the root folder.
+        //the values are either objects inside the `godle.license` package, or `godle.license.License` instances.
         license = MIT
         //the version of godot you are compatible with.
         //this may become a set of fixed versions.
