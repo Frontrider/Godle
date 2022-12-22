@@ -14,28 +14,28 @@ import org.apache.commons.lang3.SystemUtils
 //https://github.com/utopia-rise/godot-kotlin-jvm/releases/download/0.5.1-3.5.1/godot-kotlin-jvm_editor_osx_.zip
 //Default configuration values
 
-const val DefaultGodotVersion = "3.5.1"
-const val godleAddonsTaskName = "installGodleAddons"
+internal const val DefaultGodotVersion = "3.5.1"
+internal const val godleAddonsTaskName = "installGodotAddons"
 
 //Global cache folders.
-val GodotCacheFolder =
+internal val GodotCacheFolder =
     if ((System.getenv("GODOT_HOME") != null)) {
         "${System.getenv("GODOT_HOME")}/godot_cache"
     } else
         if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot_cache" else "${
             System.getenv("HOME")
         }/.gradle/godle/godot_cache"
-val GodotFolder =
+internal val GodotFolder =
     if ((System.getenv("GODOT_HOME") != null)) {
         "${System.getenv("GODOT_HOME")}/godot"
     } else
         if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/godle/godot"
 
-fun getGodotCache(version: GodotVersion): String {
+internal fun getGodotCache(version: GodotVersion): String {
     return "$GodotCacheFolder/${version.cachedName}/"
 }
 
-fun getGodotFolder(version: GodotVersion): String {
+internal fun getGodotFolder(version: GodotVersion): String {
     return "$GodotFolder/${version.cachedName}/"
 }
 
