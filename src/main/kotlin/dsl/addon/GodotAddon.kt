@@ -1,7 +1,7 @@
 package io.github.frontrider.godle.dsl.addon
 
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.dsl.configureAsGodleInternal
+import io.github.frontrider.godle.initializers.configureAsGodleInternal
 import io.github.frontrider.godle.godleAddonsTaskName
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
@@ -37,10 +37,11 @@ abstract class GodotAddon(val addonConfig: AddonConfig, val project: Project) {
             addonConfig.init()
             createFolder(File(targetFolder))
             createFolder(File(downloadFolder))
+            val internalName = getAddonInternalName()
             //This copy is the last task we do, everything else is set up to run before it.
-            project.tasks.create("installGodotAddon${getAddonInternalName()}", Copy::class.java) {
+            project.tasks.create("installGodotAddon${internalName}", Copy::class.java) {
                 with(it) {
-                    configureAsGodleInternal()
+                    configureAsGodleInternal("install addon $internalName")
                     //uses the copyspec from the addon config.
                     with(addonConfig.copySpec)
                     destinationDir = File(extension.godotRoot.get().asFile.absolutePath + "/addons/")

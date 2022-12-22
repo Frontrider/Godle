@@ -2,18 +2,14 @@ package io.github.frontrider.godle.initializers
 
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.dsl.configureAsGodleInternal
 import io.github.frontrider.godle.dsl.versioning.MajorVersion
 import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
 import org.gradle.api.Project
-import org.gradle.api.attributes.TestSuiteType
-import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.testing.AggregateTestReport
 import java.io.File
 
 fun Project.initBaseGodot() {
@@ -76,15 +72,13 @@ fun Project.initBaseGodot() {
         }
         val godotDownloadTask = tasks.create("godotDownload", GodotDownload::class.java) { download ->
             with(download) {
-                description = "Downloads the configured godot version."
-                group = "godle"
+                configureAsGodleInternal("Download the configured version of Godot.")
             }
         }
         val godotExtractTask = tasks.create("godotExtract", Copy::class.java) { copy ->
             with(copy) {
 
-                configureAsGodleInternal()
-                description = "Copies the godot binary to its storage folder"
+                configureAsGodleInternal("Copies the godot binary to its storage folder")
 
                 //If the store exists, and is not empty then it is up-to-date.
                 outputs.upToDateWhen {
@@ -108,9 +102,7 @@ fun Project.initBaseGodot() {
                 delete(
                     objects.fileProperty()
                         .convention { File(extension.godotRoot.asFile.get(), "addons") })
-                description =
-                    "Clean the addon folder. This is an optional step, you have to set up your task dependencies for this."
-                group = "godle"
+                configureAsGodlePublic("Clean the addon folder. This is an optional step, you have to set up your task dependencies for this.")
             }
             if (extension.getAddons().clearAddonsBeforeInstall) {
                 godotAddonTask.dependsOn(it)
@@ -132,8 +124,8 @@ fun Project.initBaseGodot() {
                     this.dependsOn(build)
                 }
 
-                description = "Launch the godot editor"
-                group = "godle"
+                configureAsGodleApplication("Launch the godot editor")
+
                 args("--editor")
                 args("--path ${extension.godotRoot.get()}")
 
@@ -148,8 +140,7 @@ fun Project.initBaseGodot() {
                 if (build != null) {
                     this.dependsOn(build)
                 }
-                description = "Launch the game in the current project"
-                group = "application"
+                configureAsGodleApplication("Launch the game in the current project")
 
                 args("--path ${extension.godotRoot.get()}")
 
@@ -169,8 +160,8 @@ fun Project.initBaseGodot() {
                         if (build != null) {
                             this.dependsOn(build)
                         }
-                        description = "generate gdnative bindings"
-                        group = "godle"
+                        configureAsGodlePublic("Generate gdnative bindings")
+
 
                         args("--gdnative-generate-json-api")
                         args("${project.buildDir.absolutePath}/generated/godot/api.json")
@@ -193,8 +184,7 @@ fun Project.initBaseGodot() {
                         if (build != null) {
                             this.dependsOn(build)
                         }
-                        description = "Generate gdextension bindings json"
-                        group = "godle"
+                        configureAsGodlePublic("Generate gdextension bindings")
 
                         isIgnoreExitValue = true
                         args("--dump-extension-api")
@@ -215,8 +205,7 @@ fun Project.initBaseGodot() {
                         doFirst {
                             mkdir(workingDir)
                         }
-                        description = "Generate gdextension headers."
-                        group = "godle"
+                        configureAsGodlePublic("Generate gdextension headers")
 
                         isIgnoreExitValue = true
 
@@ -234,8 +223,8 @@ fun Project.initBaseGodot() {
 
         tasks.create("godotVersion", GodotExec::class.java) { exec ->
             with(exec) {
-                description = "Prints the version of the currently downloaded godot executable"
-                group = "godle"
+                configureAsGodlePublic("Prints the version of the currently downloaded godot executable")
+
                 args("--version")
 
                 dependsOn(godotDownloadTask)

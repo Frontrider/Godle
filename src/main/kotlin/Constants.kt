@@ -19,23 +19,30 @@ const val GodotAssetStoreURL = "https://godotengine.org/asset-library/api/"
 const val godleAddonsTaskName = "godleAddons"
 
 //Global cache folders.
-val GodotCacheFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot_cache" else "${System.getenv("HOME")}/.gradle/bin/godot_cache"
-val GodotFolder = if(System.getenv("GODOT_HOME") != null) "${System.getenv("GODOT_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/bin/godot"
+val GodotCacheFolder =
+    if ((System.getenv("GODOT_HOME") != null)) {
+        System.getenv("GODOT_HOME")!!
+    } else
+        if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot_cache" else "${
+            System.getenv("HOME")
+        }/.gradle/godle/godot_cache"
+val GodotFolder =
+    if ((System.getenv("GODOT_HOME") != null)) {
+        System.getenv("GODOT_HOME")!!
+    } else
+        if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/godle/godot"
 
-
-
-
-fun getGodotCache(version:GodotVersion): String {
+fun getGodotCache(version: GodotVersion): String {
     return "$GodotCacheFolder/${version.cachedName}/"
 }
 
-fun getGodotFolder(version:GodotVersion): String {
+fun getGodotFolder(version: GodotVersion): String {
     return "$GodotFolder/${version.cachedName}/"
 }
 
 //System type detection
-enum class SUPPORTED_OS{
-    LINUX,MAC,WINDOWS
+enum class SUPPORTED_OS {
+    LINUX, MAC, WINDOWS
 }
 
 val os = when {
@@ -51,7 +58,7 @@ val os = when {
         SUPPORTED_OS.LINUX
     }
 }
-val bit = when(SystemUtils.OS_ARCH){
-    "x86"-> "32"
-    else-> "64"
+val bit = when (SystemUtils.OS_ARCH) {
+    "x86" -> "32"
+    else -> "64"
 }

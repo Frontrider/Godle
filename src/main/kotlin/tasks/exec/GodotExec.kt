@@ -1,6 +1,6 @@
 package io.github.frontrider.godle.tasks.exec
 
-import io.github.frontrider.godle.initExec
+import io.github.frontrider.godle.initGodotExec
 import org.gradle.api.tasks.Exec
 
 /**
@@ -9,7 +9,7 @@ import org.gradle.api.tasks.Exec
 @Suppress("LeakingThis")
 open class GodotExec : Exec() {
     init {
-        initExec(project, this)
+        initGodotExec(project, this)
         val task = this
         doFirst{
             println("Godot task running as: ")

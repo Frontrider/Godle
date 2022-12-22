@@ -17,7 +17,7 @@ abstract class GodotAddonExtension  @Inject constructor(
     var enableAddonsGitignore: Boolean = false
     //if set to true, godot will remove all addons before downloading new ones.
     //by default, it is enabled together with addon management.
-    var clearAddonsBeforeInstall = true
+    var clearAddonsBeforeInstall = false
 
     var assetStoreURL:String = GodotAssetStoreURL
     //DSL for godot addons.

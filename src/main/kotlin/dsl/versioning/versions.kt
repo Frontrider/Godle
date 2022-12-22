@@ -90,10 +90,12 @@ fun GodleExtension.`kotlin-jvm`(version: String, detectJVM: Boolean = true): God
                     return@GodotVersion
                 }
                 println("attempting to detect jvm!")
+
                 //attempt to determine the current JVM's path and use it.
                 val command = ProcessHandle.current()
                     .info()
                     .command()
+
                 if (command.isPresent) {
                     val javaHome = command.get().removeSuffix("/bin/java")
                     println("jvm found at $javaHome")

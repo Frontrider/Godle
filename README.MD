@@ -27,8 +27,8 @@ configure<GodleExtension>{
         //add a gitignore file into the addons folder, so it won't be committed into the repository.
         enableAddonsGitignore = true
         
-        //set it to false, to avoid cleaning the addons folder
-        cleanUndeclaredAddons.set(true)
+        //when true, the addons folder will be cleaned.
+        clearAddonsBeforeInstall.set(true)
         
         install {
             //downloaded from the asset store

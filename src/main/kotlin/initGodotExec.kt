@@ -8,7 +8,7 @@ import org.gradle.process.ExecSpec
 /**
  * Sets up an exec spec to run godot.
  * */
-fun initExec(project: Project,exec: ExecSpec){
+fun initGodotExec(project: Project, exec: ExecSpec){
     with(exec) {
         val extension = project.extensions.getByName("godle") as GodleExtension
         val storePath = getGodotFolder(extension.version.get())
@@ -24,12 +24,11 @@ fun initExec(project: Project,exec: ExecSpec){
         } else {
             commandLine(godotExecutable)
         }
-
         extension.version.get().execTask(this)
     }
 }
 
-fun Project.initExec(exec: ExecSpec,configure:ExecSpec.()->Unit){
-    initExec(this,exec)
+fun Project.initGodotExec(exec: ExecSpec, configure:ExecSpec.()->Unit){
+    initGodotExec(this,exec)
     exec.configure()
 }

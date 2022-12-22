@@ -3,7 +3,7 @@ package io.github.frontrider.godle.dsl.addon.sources
 import fi.linuxbox.gradle.download.Download
 import io.github.frontrider.godle.dsl.addon.AddonConfig
 import io.github.frontrider.godle.dsl.addon.GodotAddon
-import io.github.frontrider.godle.dsl.configureAsGodleInternal
+import io.github.frontrider.godle.initializers.configureAsGodleInternal
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import java.io.File
@@ -18,7 +18,7 @@ class URLAddon(val url: String, addonConfig: AddonConfig, project: Project) : Go
         val internalName = getAddonInternalName()
         val download = project.tasks.create("downloadGodotAddonFromURL$internalName", Download::class.java) {
             with(it) {
-                configureAsGodleInternal()
+                configureAsGodleInternal("download addon $internalName")
                 from(url)
                 to(File(downloadFolder,"url_$internalName.zip"))
             }
@@ -26,7 +26,7 @@ class URLAddon(val url: String, addonConfig: AddonConfig, project: Project) : Go
 
         val extract = project.tasks.create("extractGodotAddonFromURL$internalName", Copy::class.java){
             with(it){
-                configureAsGodleInternal()
+                configureAsGodleInternal("extract addon $internalName")
                 from(project.zipTree(File(downloadFolder,"url_$internalName.zip")))
                 into(getLocalFolder())
                 dependsOn(download)

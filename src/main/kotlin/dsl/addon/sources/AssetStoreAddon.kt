@@ -5,7 +5,7 @@ import godot.assets.api.AssetsApi
 import godot.assets.invoker.ApiException
 import io.github.frontrider.godle.dsl.addon.AddonConfig
 import io.github.frontrider.godle.dsl.addon.GodotAddon
-import io.github.frontrider.godle.dsl.configureAsGodleInternal
+import io.github.frontrider.godle.initializers.configureAsGodleInternal
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import java.io.File
@@ -24,7 +24,7 @@ class AssetStoreAddon(val id: String, addonConfig: AddonConfig, project: Project
             addonConfig.isGitLike = assetDetails.downloadProvider!!.startsWith("Git")
             val download = project.tasks.create("downloadGodotAddonFromStore$internalName", Download::class.java) {
                 with(it) {
-                    configureAsGodleInternal()
+                    configureAsGodleInternal("download $id from the asset library.")
                     from(assetDetails.downloadUrl)
                     to(File(downloadFolder, "store$internalName.zip"))
                 }
@@ -32,8 +32,8 @@ class AssetStoreAddon(val id: String, addonConfig: AddonConfig, project: Project
 
             val extract = project.tasks.create("extractGodotAddonFromStore$internalName", Copy::class.java) {
                 with(it) {
-                    configureAsGodleInternal()
-                    from(project.zipTree(File(downloadFolder, "store$internalName.zip")))
+                    configureAsGodleInternal("extract $id from the asset library")
+                    from(project.zipTree(download.to.asFile))
                     into(getLocalFolder())
                     dependsOn(download)
                 }

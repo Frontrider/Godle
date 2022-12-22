@@ -42,7 +42,12 @@ fun doRun(projectDir: File, tasks: List<String>, vararg args: String, fail: Bool
     val builder = GradleRunner.create()
         .withProjectDir(projectDir)
         .withArguments(tasks + args.asList())
+        //set up godot home folder so we can check the binary results.
+        .withEnvironment(mapOf(
+            "GODOT_HOME" to "${projectDir.absolutePath}/.gradle_home/"
+        ))
         .withPluginClasspath()
+
 
     val result = if (fail) builder.buildAndFail() else builder.build()
 
