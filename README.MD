@@ -1,4 +1,4 @@
-![Godle Logo](![godle-logo.png](godle-logo.png))
+![Godle Logo](godle-logo.png)
 # Godle, Godot plugin for Gradle
 
 Plugin to manage Godot, and its dependencies through Gradle.
