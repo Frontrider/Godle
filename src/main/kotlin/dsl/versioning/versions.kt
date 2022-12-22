@@ -33,7 +33,7 @@ infix fun GodleExtension.godot4Beta(version: String): GodotVersion {
         linuxBinary = "Godot_v4.0-beta%version%_linux.x86_%bit%",
         windowsBinary = "Godot_v4.0-beta%version%win%bit%.exe",
         macBinary = "Godot.app/Contents/MacOS/Godot",
-        majorVersion = MajorVersion.Godot4
+        majorVersion = versionAsGodot4()
     )
 }
 
@@ -56,6 +56,26 @@ fun GodleExtension.mono(version: String): GodotVersion {
     )
 }
 
+
+fun GodleExtension.local(binaryPath: String,majorVersion: MajorVersion): GodotVersion {
+    return GodotVersion(
+        version = "local",
+        cacheName = "local",
+        linuxDownloadURL = "",
+        windowsDownloadURL = "",
+        macDownloadURL = "",
+        linuxBinary = binaryPath,
+        windowsBinary = binaryPath,
+        macBinary = binaryPath,
+        majorVersion = majorVersion
+    )
+}
+
+fun GodleExtension.asLocal(binaryPath: String,majorVersion: MajorVersion){
+    this.version.set(local(binaryPath,majorVersion))
+}
+
+//c# support
 infix fun GodleExtension.asMono(version: String) {
     this.version.set(mono(version))
 }

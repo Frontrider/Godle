@@ -1,5 +1,6 @@
 package io.github.frontrider.godle.tasks.exec
 
+import io.github.frontrider.godle.dsl.GodleExtension
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import java.io.File
@@ -11,7 +12,7 @@ import javax.inject.Inject
 @Suppress("unused")
 open class GodotScriptExec @Inject constructor() : GodotExec() {
 
-    @InputFile()
+    @InputFile
     var script: File? = null
 
     @Input
@@ -24,13 +25,16 @@ open class GodotScriptExec @Inject constructor() : GodotExec() {
     @Input
     var headless = true
 
+
     init {
         doFirst {
-            args("--script", script!!.relativeTo(workingDir))
+            val extension = extensions.getByName("godle") as GodleExtension
+            val version = extension.version.get().majorVersion
+
+            args(version.scriptFlag, script!!.relativeTo(workingDir))
             if (headless) {
-                args("--no-window")
+                args(version.headlessFlag)
             }
-            args("--debug")
             args(scriptArgs)
         }
     }

@@ -12,15 +12,17 @@ import javax.inject.Inject
  * Downloads the godot binary.
  * */
 @Suppress("LeakingThis")
-abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor) :Download(workerExecutor) {
+abstract class GodotDownload @Inject constructor(workerExecutor: WorkerExecutor) : Download(workerExecutor) {
 
     init {
         val extension = project.extensions.getByName("godle") as GodleExtension
         val downloadPath = getGodotCache(extension.version.get())
 
+        enabled = downloadPath.isNotEmpty()
+
         from.set(extension.version.get().getDownloadURL())
         println("downloading godot from: ${from.get()}")
-        to.set(File(downloadPath,"godot.zip"))
+        to.set(File(downloadPath, "godot.zip"))
         //IF we already downloaded then this is up-to-date.
         outputs.upToDateWhen {
             to.get().asFile.exists()

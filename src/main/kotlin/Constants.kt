@@ -15,8 +15,7 @@ import org.apache.commons.lang3.SystemUtils
 //Default configuration values
 
 const val DefaultGodotVersion = "3.5.1"
-const val GodotAssetStoreURL = "https://godotengine.org/asset-library/api/"
-const val godleAddonsTaskName = "godleAddons"
+const val godleAddonsTaskName = "installGodleAddons"
 
 //Global cache folders.
 val GodotCacheFolder =

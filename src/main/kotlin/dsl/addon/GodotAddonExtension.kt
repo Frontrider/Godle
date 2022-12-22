@@ -1,6 +1,5 @@
 package io.github.frontrider.godle.dsl.addon
 
-import io.github.frontrider.godle.GodotAssetStoreURL
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.tasks.Nested
@@ -19,7 +18,6 @@ abstract class GodotAddonExtension  @Inject constructor(
     //by default, it is enabled together with addon management.
     var clearAddonsBeforeInstall = false
 
-    var assetStoreURL:String = GodotAssetStoreURL
     //DSL for godot addons.
     @Nested
     abstract fun getInstalledAddons(): GodotAddonDependencyContainer

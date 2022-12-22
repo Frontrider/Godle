@@ -2,7 +2,7 @@ package io.github.frontrider.godle.initializers
 
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.dsl.versioning.MajorVersion
+import io.github.frontrider.godle.getGodotCache
 import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
@@ -79,7 +79,7 @@ fun Project.initBaseGodot() {
             with(copy) {
 
                 configureAsGodleInternal("Copies the godot binary to its storage folder")
-
+                enabled = godotDownloadTask.enabled
                 //If the store exists, and is not empty then it is up-to-date.
                 outputs.upToDateWhen {
                     val target = File(storePath)
@@ -114,7 +114,7 @@ fun Project.initBaseGodot() {
         //THIS WILL BE TREATED AS A CONVENTION! IF the build task exists, then it will run!
         val build = tasks.findByPath("build")
 
-        tasks.create("godotEditor", GodotExec::class.java) { exec ->
+        tasks.create("godotRunEditor", GodotExec::class.java) { exec ->
 
             with(exec) {
                 //IF a build task exists, then depend on it.
@@ -126,8 +126,8 @@ fun Project.initBaseGodot() {
 
                 configureAsGodleApplication("Launch the godot editor")
 
-                args("--editor")
-                args("--path ${extension.godotRoot.get()}")
+                args(version.majorVersion.editorFlag)
+                args(version.majorVersion.projectPathFlag,"${extension.godotRoot.get()}")
 
                 dependsOn(godotDownloadTask)
                 dependsOn(godotAddonTask)
@@ -142,7 +142,7 @@ fun Project.initBaseGodot() {
                 }
                 configureAsGodleApplication("Launch the game in the current project")
 
-                args("--path ${extension.godotRoot.get()}")
+                args(version.majorVersion.projectPathFlag,"${extension.godotRoot.get()}")
 
                 dependsOn(godotExtractTask)
                 dependsOn(godotDownloadTask)
@@ -150,73 +150,22 @@ fun Project.initBaseGodot() {
             }
         }
 
-        when (version.majorVersion) {
-            MajorVersion.Godot3 -> {
-                tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
-                    with(exec) {
-                        doFirst {
-                            mkdir("${project.buildDir.absolutePath}/generated/godot/")
-                        }
-                        if (build != null) {
-                            this.dependsOn(build)
-                        }
-                        configureAsGodlePublic("Generate gdnative bindings")
-
-
-                        args("--gdnative-generate-json-api")
-                        args("${project.buildDir.absolutePath}/generated/godot/api.json")
-                        dependsOn(godotExtractTask)
-                        dependsOn(godotDownloadTask)
-                        dependsOn(godotAddonTask)
-                    }
+        tasks.create("godleGenerateBindings", GodotExec::class.java) { exec ->
+            with(exec) {
+                doFirst {
+                    mkdir("${project.buildDir.absolutePath}/generated/godot/")
                 }
-            }
-
-            MajorVersion.Godot4 -> {
-
-                tasks.create("godotGenerateBindingJson", GodotExec::class.java) { exec ->
-                    with(exec) {
-                        workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
-
-                        doFirst {
-                            mkdir(workingDir)
-                        }
-                        if (build != null) {
-                            this.dependsOn(build)
-                        }
-                        configureAsGodlePublic("Generate gdextension bindings")
-
-                        isIgnoreExitValue = true
-                        args("--dump-extension-api")
-                        args("--no-window")
-                        dependsOn(godotExtractTask)
-                        dependsOn(godotDownloadTask)
-                        dependsOn(godotAddonTask)
-                    }
+                if (build != null) {
+                    this.dependsOn(build)
                 }
+                workingDir("${project.buildDir.absolutePath}/generated/godot/")
+                configureAsGodlePublic("Generate native bindings")
+                args(version.majorVersion.headlessFlag)
+                args(version.majorVersion.exportBindingsFlags)
 
-                tasks.create("godotGenerateGdExtensionInterface", GodotExec::class.java) { exec ->
-                    with(exec) {
-                        if (build != null) {
-                            this.dependsOn(build)
-                        }
-                        workingDir = file("${project.buildDir.absolutePath}/generated/godot/")
-
-                        doFirst {
-                            mkdir(workingDir)
-                        }
-                        configureAsGodlePublic("Generate gdextension headers")
-
-                        isIgnoreExitValue = true
-
-                        args("--dump-gdextension-interface")
-                        args("--no-window")
-
-                        dependsOn(godotExtractTask)
-                        dependsOn(godotDownloadTask)
-                        dependsOn(godotAddonTask)
-                    }
-                }
+                dependsOn(godotExtractTask)
+                dependsOn(godotDownloadTask)
+                dependsOn(godotAddonTask)
             }
         }
 
@@ -224,9 +173,7 @@ fun Project.initBaseGodot() {
         tasks.create("godotVersion", GodotExec::class.java) { exec ->
             with(exec) {
                 configureAsGodlePublic("Prints the version of the currently downloaded godot executable")
-
-                args("--version")
-
+                args(version.majorVersion.versionFlag)
                 dependsOn(godotDownloadTask)
                 dependsOn(godotExtractTask)
             }
