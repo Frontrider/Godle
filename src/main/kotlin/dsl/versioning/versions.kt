@@ -2,16 +2,12 @@
 
 package io.github.frontrider.godle.dsl.versioning
 
-import io.github.frontrider.godle.bit
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.os
 
 
 //vanilla godot with no modules
 fun GodleExtension.godot(version: String): GodotVersion {
     return GodotVersion(
-        os = os,
-        bit = bit,
         version = version,
         cacheName = "v%version%-%bit%",
         linuxDownloadURL = "https://downloads.tuxfamily.org/godotengine/%version%/Godot_v%version%-stable_x11.%bit%.zip",
@@ -29,8 +25,6 @@ infix fun GodleExtension.asGodot(version: String) {
 
 infix fun GodleExtension.godot4Beta(version: String): GodotVersion {
     return GodotVersion(
-        os = os,
-        bit = bit,
         version = version,
         cacheName = "godot-4.0-beta-%version%-%bit%",
         linuxDownloadURL = "https://downloads.tuxfamily.org/godotengine/4.0/beta%version%/Godot_v4.0-beta%version%_linux.x86_%bit%.zip",
@@ -51,8 +45,6 @@ infix fun GodleExtension.asGodot4Beta(version: String){
 //c# support
 fun GodleExtension.mono(version: String): GodotVersion {
     return GodotVersion(
-        os = os,
-        bit = bit,
         version = version,
         cacheName = "v%version%-%bit%-mono",
         linuxDownloadURL = "https://downloads.tuxfamily.org/godotengine/%version%/mono/Godot_v%version%-stable_mono_x11_%bit%.zip",
@@ -72,8 +64,6 @@ var jvmPath:String? = null
 //kotlin/jvm support
 fun GodleExtension.`kotlin-jvm`(version: String, detectJVM: Boolean = true): GodotVersion {
     return GodotVersion(
-        os = os,
-        bit = bit,
         version = version,
         cacheName = "v%version%-%bit%-kotlin",
         linuxDownloadURL = "https://github.com/utopia-rise/godot-kotlin-jvm/releases/download/%version%/godot-kotlin-jvm_editor_x11_.zip",

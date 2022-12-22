@@ -168,27 +168,3 @@ configure<GodleExtension> {
 }
 
 ```
-
-# Default Tasks
-
-Godle provides a number of tasks to work with.
-
-- `cleanGodotAddons`: cleans the addon folder, so godle can download it again.
-- `godleAddons`: installs the currently configured addons
-- `godotDownload`: downloads the currently configured version of Godot.
-- `godotEditor`: runs the editor in the `godotRoot` folder (configured on the extension). It will open any projects in that folder.
-- `godotVersion`: prints the current Godot version.
-- `godotRunGame`: runs the game in the `godotRoot` folder (configured on the extension). It will open any projects in that folder.
-
-Godle can produce gdnative/gdextension bindings for the currently downloaded godot version.
-
-On Godot 3, use the `godotGenerateBindingJson` task to produce the json under `build/generated/godot/api.json`.
-
-On Godot 4, use the `godotGenerateBindingJson` task to produce the json under `build/generated/godot/extension_api.json`, or the `godotGenerateGDExtensionInterface` to create godot's header file under `build/generated/godot/gdnative_interface.h`
-
-This can be used to organize binding generation for that version of Godot.
-
-<br>
-<br>
-<br>
-Note for the gradle team for approval testing: the plugin without any configuration runs one of the later versions of godot 3.5, running the `godotEditor` task is enough to check that functionality, it should open the right version of the godot editor, with the created plank project skipping the project browser.

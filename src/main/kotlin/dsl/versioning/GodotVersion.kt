@@ -25,8 +25,8 @@ data class GodotVersion(
 
     val version: String,
 
-    val os: SUPPORTED_OS,
-    val bit: String,
+    val os: SUPPORTED_OS = io.github.frontrider.godle.os,
+    val bit: String = io.github.frontrider.godle.bit,
     val cacheName:String,
 
     val downloadTask: (GodotDownload) -> Unit = {},

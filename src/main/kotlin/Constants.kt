@@ -21,14 +21,14 @@ const val godleAddonsTaskName = "godleAddons"
 //Global cache folders.
 val GodotCacheFolder =
     if ((System.getenv("GODOT_HOME") != null)) {
-        System.getenv("GODOT_HOME")!!
+        "${System.getenv("GODOT_HOME")}/godot_cache"
     } else
         if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot_cache" else "${
             System.getenv("HOME")
         }/.gradle/godle/godot_cache"
 val GodotFolder =
     if ((System.getenv("GODOT_HOME") != null)) {
-        System.getenv("GODOT_HOME")!!
+        "${System.getenv("GODOT_HOME")}/godot"
     } else
         if (System.getenv("GRADLE_HOME") != null) "${System.getenv("GRADLE_HOME")}/godle/godot" else "${System.getenv("HOME")}/.gradle/godle/godot"
 
