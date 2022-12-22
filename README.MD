@@ -15,6 +15,8 @@ plugins {
     id("io.github.frontrider.godle") version "<godle version>"
 }
 ```
+https://plugins.gradle.org/plugin/io.github.frontrider.godle
+
 
 # Configuration
 
