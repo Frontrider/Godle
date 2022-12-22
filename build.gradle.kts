@@ -117,7 +117,6 @@ gradlePlugin {
     }
     testSourceSets(functionalTest)
     testSourceSets(integrationTest)
-
 }
 
 publishing {
@@ -198,7 +197,6 @@ class LicenseData(
     var licenseListVersion: String? = null,
     var licenses: ArrayList<License> = arrayListOf(),
     var releaseDate: String? = null
-
 )
 
 class License(
@@ -263,6 +261,5 @@ val generateLicenseData= tasks.create("generateLicenseData") {
         }
     }
 }
-
 
 compileKotlin.dependsOn("openApiGenerate")

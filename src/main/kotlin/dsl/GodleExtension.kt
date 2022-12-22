@@ -18,6 +18,7 @@ import javax.inject.Inject
  * */
 @Suppress("unused")
 abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, val project: Project) {
+
     val version: Property<GodotVersion> = objectFactory.property(GodotVersion::class.java).convention(godot(DefaultGodotVersion))
 
     //the root where the godot project lives. Defaults to the root folder.
