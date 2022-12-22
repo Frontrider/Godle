@@ -2,7 +2,6 @@ package io.github.frontrider.godle.dsl
 
 import io.github.frontrider.godle.DefaultGodotVersion
 import io.github.frontrider.godle.dsl.addon.GodotAddonExtension
-import io.github.frontrider.godle.dsl.publishing.AddonPublishing
 import io.github.frontrider.godle.dsl.versioning.GodotVersion
 import io.github.frontrider.godle.dsl.versioning.godot
 import org.gradle.api.Action
@@ -40,14 +39,6 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
     val env = HashMap<String, String>()
     fun env(key: String, value: String) {
         env[key] = value
-    }
-    @Nested
-    abstract fun getPublishingConfig(): AddonPublishing
-
-    internal var publishingEnabled = false
-    fun publishing(action: Action<in AddonPublishing>){
-        publishingEnabled = true
-        action.execute(getPublishingConfig())
     }
 
 }

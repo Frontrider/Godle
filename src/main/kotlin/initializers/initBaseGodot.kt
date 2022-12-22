@@ -2,7 +2,6 @@ package io.github.frontrider.godle.initializers
 
 import io.github.frontrider.godle.GodotFolder
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.getGodotCache
 import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
@@ -12,7 +11,7 @@ import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Delete
 import java.io.File
 
-fun Project.initBaseGodot() {
+internal fun Project.initBaseGodot() {
 
     afterEvaluate {
         val extension = extensions.getByName("godle") as GodleExtension

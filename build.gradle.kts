@@ -1,5 +1,3 @@
-import com.google.gson.Gson
-import com.google.gson.JsonParser
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.utils.addExtendsFromRelation
 
@@ -76,15 +74,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
     testImplementation("org.junit.platform:junit-platform-runner:1.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
-
-    //corutines for async execution of tests.
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm
-    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4")
-
-    //git compat, used to fetch some repository information.
-    // https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
-    implementation("org.eclipse.jgit:org.eclipse.jgit:6.4.0.202211300538-r")
 
     //openapi:
     implementation("io.swagger:swagger-annotations:$swaggerAnnotationsVersion")
@@ -190,76 +179,3 @@ openApiGenerate {
         )
     )
 }
-val compileKotlin: Task by tasks
-
-//generate license information.
-class LicenseData(
-    var licenseListVersion: String? = null,
-    var licenses: ArrayList<License> = arrayListOf(),
-    var releaseDate: String? = null
-)
-
-class License(
-    var reference: String?=null,
-    var isDeprecatedLicenseId: Boolean?=null,
-    var detailsUrl: String?=null,
-    var referenceNumber: Int?=null,
-    var name: String?=null,
-    var licenseId: String?=null,
-    var seeAlso: List<String> = emptyList(),
-    var isOsiApproved: Boolean?=null
-)
-
-val generateLicenseData= tasks.create("generateLicenseData") {
-    compileKotlin.dependsOn(this)
-    doFirst {
-        val text = File(project.rootDir, "/src/main/resources/licenses.json").readText()
-        val licenseData = Gson().fromJson(text, LicenseData::class.java)
-        file("$generatedLicenseSource/License.kt").apply {
-            parentFile.mkdirs()
-            writeText(
-                """
-            package godle.license
-            
-            abstract class License(
-                var reference: String,
-                var isDeprecatedLicenseId: Boolean,
-                var detailsUrl: String,
-                var referenceNumber: Int,
-                var name: String,
-                var licenseId: String,
-                var seeAlso: List<String>,
-                var isOsiApproved: Boolean
-            )
-        """.trimIndent()
-            )
-        }
-        licenseData.licenses.forEach {
-            val fileName = it.licenseId!!.replace(".","_")
-            file("$generatedLicenseSource/${fileName}.kt").apply {
-                writeText(
-                    """
-            package godle.license
-            
-            object `${fileName}`:License(
-                reference = "${it.reference}",
-                referenceNumber = ${it.referenceNumber},
-                isDeprecatedLicenseId = ${it.isDeprecatedLicenseId},
-                name = ${"\"\"\""+it.name+"\"\"\""},
-                licenseId = "${it.licenseId}",
-                isOsiApproved = ${it.isOsiApproved},
-                detailsUrl= "${it.detailsUrl}",
-                seeAlso = listOf(
-                    ${it.seeAlso.map { also ->
-                        """"$also""""
-                    }.joinToString(",")}
-                )
-            )
-        """.trimIndent()
-                )
-            }
-        }
-    }
-}
-
-compileKotlin.dependsOn("openApiGenerate")

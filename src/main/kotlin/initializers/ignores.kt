@@ -7,7 +7,7 @@ import java.io.File
 /**
  * Set up gdignores on folders that need it.
  * */
-fun Project.ignores(){
+internal fun Project.ignores(){
     afterEvaluate {
 
         val extension = extensions.getByName("godle") as GodleExtension
