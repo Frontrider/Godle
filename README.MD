@@ -1,4 +1,4 @@
-![Godle Logo](godle-logo.png)
+![Godle Logo](logo.png)
 # Godle, Godot plugin for Gradle
 
 Plugin to manage Godot, and its dependencies through Gradle.
@@ -7,7 +7,7 @@ Primarily meant to be used together with https://godot-kotl.in/, but it also sup
 
 The JVM module of godot is based on kotlin, so this plugin is also designed around the kotlin DSL, but is compatible with groovy.
 
-The plugin itself needs java 9 and gradle 7.4 ([uses the test report aggregation feature](https://docs.gradle.org/7.4/userguide/test_report_aggregation_plugin.html)), godot kotlin requires java 11.
+The plugin itself needs java 9, godot kotlin requires java 11.
 
 # Installation
 
