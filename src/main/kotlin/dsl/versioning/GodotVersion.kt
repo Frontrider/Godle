@@ -26,8 +26,9 @@ data class GodotVersion(
 
     val downloadTask: (GodotDownload) -> Unit = {},
     val execTask: (ExecSpec) -> Unit = {},
-    val majorVersion: MajorVersion = versionAsGodot3()
-
+    val majorVersion: MajorVersion = versionAsGodot3(),
+    val bindingName:String = "extension_api.json",
+    val headerName:String = "gdextension_interface.h",
 ) {
     val cachedName:String = templateString(cacheName)
     fun templateString(input: String): String {

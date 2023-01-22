@@ -8,13 +8,13 @@ import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Delete
+
 import java.io.File
 
 internal fun Project.initBaseGodot() {
 
     afterEvaluate {
-        val extension = extensions.getByName("godle") as GodleExtension
+        val extension = extensions.getByType(GodleExtension::class.java)
         println("Godot information:")
         val version = extension.version.get()
         println("Current version: ${version.version}")
