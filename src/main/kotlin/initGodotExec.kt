@@ -14,7 +14,7 @@ internal fun initGodotExec(project: Project, exec: ExecSpec){
         val storePath = getGodotFolder(extension.version.get())
 
         val godotExecutable = storePath + "/" + extension.version.get().getBinaryPath()
-        val workDir = extension.godotRoot.get().asFile
+        val workDir = extension.godotRoot.get().asFile.absoluteFile.absolutePath
         workingDir(workDir)
         environment(extension.env)
         //--path argument is set to make sure that godot uses the right working directory.

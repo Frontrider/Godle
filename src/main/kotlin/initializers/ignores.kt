@@ -29,21 +29,5 @@ internal fun Project.ignores(){
                 }
             }
         }
-
-        //the addons folder might need to be in a gitignore so gradle can take full control over it.
-        if (extension.getAddons().enableAddonsGitignore) {
-            File(rootDir, ".gitignore").apply {
-                //Do not overwrite this if it already exists.
-                if (!exists()) {
-                    writeText(
-                        """
-                *
-                */
-                !.gitignore
-                """.trimIndent()
-                    )
-                }
-            }
-        }
     }
 }

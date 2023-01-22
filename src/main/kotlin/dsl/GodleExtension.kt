@@ -1,15 +1,12 @@
 package io.github.frontrider.godle.dsl
 
 import io.github.frontrider.godle.DefaultGodotVersion
-import io.github.frontrider.godle.dsl.addon.GodotAddonExtension
 import io.github.frontrider.godle.dsl.versioning.GodotVersion
 import io.github.frontrider.godle.dsl.versioning.godot
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Nested
 import javax.inject.Inject
 
 /**
@@ -27,14 +24,6 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
     var ignoreBuildFolder = true
     //set it to true, to create a blank godot project in the godot root.
     var createBlankProject = true
-
-    //DSL for godot addons.
-    @Nested
-    abstract fun getAddons(): GodotAddonExtension
-
-    open fun addons(action: Action<in GodotAddonExtension>) {
-        action.execute(getAddons())
-    }
 
     val env = HashMap<String, String>()
     fun env(key: String, value: String) {
