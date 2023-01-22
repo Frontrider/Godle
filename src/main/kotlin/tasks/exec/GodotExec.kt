@@ -18,7 +18,7 @@ open class GodotExec : Exec() {
         initGodotExec(project, this)
         val task = this
         doFirst{
-            val extension = extensions.getByName("godle") as GodleExtension
+            val extension = extensions.getByType(GodleExtension::class.java)
             val version = extension.version.get().majorVersion
 
             println("Godot task running as: ")
