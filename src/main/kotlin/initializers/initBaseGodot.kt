@@ -114,7 +114,7 @@ internal fun Project.initBaseGodot() {
                 configureAsGodleApplication("Launch the godot editor")
 
                 args(version.majorVersion.editorFlag)
-                args(version.majorVersion.projectPathFlag,"${extension.godotRoot.get()}")
+                args(version.majorVersion.projectPathFlag, extension.godotRoot.get().asFile.absolutePath)
 
                 dependsOn(godotDownloadTask)
                 dependsOn(godotAddonTask)
@@ -129,7 +129,7 @@ internal fun Project.initBaseGodot() {
                 }
                 configureAsGodleApplication("Launch the game in the current project")
 
-                args(version.majorVersion.projectPathFlag,"${extension.godotRoot.get()}")
+                args(version.majorVersion.projectPathFlag, extension.godotRoot.get().asFile.absolutePath)
 
                 dependsOn(godotExtractTask)
                 dependsOn(godotDownloadTask)
