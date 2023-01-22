@@ -9,11 +9,12 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.16.0"
+version = "0.17.0"
 
 repositories {
     mavenCentral()
 }
+
 allprojects {
     tasks.withType(Javadoc::class.java).all { enabled = false }
 }
