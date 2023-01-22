@@ -96,18 +96,6 @@ internal fun Project.initBaseGodot() {
             }
         }
 
-        tasks.create("cleanGodotAddons", Delete::class.java) {
-            with(it) {
-                delete(
-                    objects.fileProperty()
-                        .convention { File(extension.godotRoot.asFile.get(), "addons") })
-                configureAsGodlePublic("Clean the addon folder. This is an optional step, you have to set up your task dependencies for this.")
-            }
-            if (extension.getAddons().clearAddonsBeforeInstall) {
-                godotAddonTask.dependsOn(it)
-            }
-        }
-
         //IF a build task exists, then we depend on it.
         //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided.
         //THIS WILL BE TREATED AS A CONVENTION! IF the build task exists, then it will run!
