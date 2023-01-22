@@ -16,17 +16,12 @@ open class GodotExec : Exec() {
 
     init {
         initGodotExec(project, this)
-        val task = this
-        doFirst{
-            val extension = extensions.getByType(GodleExtension::class.java)
-            val version = extension.version.get().majorVersion
 
-            println("Godot task running as: ")
-            println("runs in: "+task.workingDir.absolutePath)
-            println(commandLine)
-            if(debug){
-                args(version.debugFlag)
-            }
+        val extension = extensions.getByType(GodleExtension::class.java)
+        val version = extension.version.get().majorVersion
+
+        if (debug) {
+            args(version.debugFlag)
         }
     }
 }
