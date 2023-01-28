@@ -12,7 +12,7 @@ import org.gradle.api.tasks.Input
 open class GodotExec : Exec() {
 
     @Input
-    var debug = true
+    var debug = false
 
     init {
         initGodotExec(project, this)
