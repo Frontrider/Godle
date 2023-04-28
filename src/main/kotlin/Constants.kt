@@ -19,25 +19,24 @@ internal const val godleAddonsTaskName = "installGodotAddons"
 
 
 //Global cache folders.
-internal val GodotCacheFolder =
-    when {
+internal val GodotCacheFolder = when {
     (System.getenv("GODOT_HOME") != null) -> "${System.getenv("GODOT_HOME")}/godot_cache"
     (System.getenv("GRADLE_HOME") != null) -> "${System.getenv("GRADLE_HOME")}/godle/godot_cache"
     (System.getenv("HOME") != null) -> "${System.getenv("HOME")}/.gradle/godle/godot_cache"
     else -> {
         "${System.getProperty("user.home")}/.gradle/godle/godot_cache"
     }
+}
 
 
-internal val GodotFolder =
-    when {
-        (System.getenv("GODOT_HOME") != null) -> "${System.getenv("GODOT_HOME")}/godot"
-        (System.getenv("GRADLE_HOME") != null) -> "${System.getenv("GRADLE_HOME")}/godle/godot"
-        (System.getenv("HOME") != null) -> "${System.getenv("HOME")}/.gradle/godle/godot"
-        else -> {
-            "${System.getProperty("user.home")}/.gradle/godle/godot"
-        }
+internal val GodotFolder = when {
+    (System.getenv("GODOT_HOME") != null) -> "${System.getenv("GODOT_HOME")}/godot"
+    (System.getenv("GRADLE_HOME") != null) -> "${System.getenv("GRADLE_HOME")}/godle/godot"
+    (System.getenv("HOME") != null) -> "${System.getenv("HOME")}/.gradle/godle/godot"
+    else -> {
+        "${System.getProperty("user.home")}/.gradle/godle/godot"
     }
+}
 
 internal fun getGodotCache(version: GodotVersion): String {
     return "$GodotCacheFolder/${version.cachedName}/"
