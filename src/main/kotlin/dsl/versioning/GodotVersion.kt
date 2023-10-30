@@ -26,6 +26,7 @@ data class GodotVersion(
 
     val downloadTask: (GodotDownload) -> Unit = {},
     val execTask: (ExecSpec) -> Unit = {},
+    val isJava:Boolean = false,
     val majorVersion: MajorVersion = versionAsGodot3(),
     val bindingName:String = "extension_api.json",
     val headerName:String = "gdextension_interface.h",

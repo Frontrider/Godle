@@ -13,5 +13,6 @@ class Godle : Plugin<Project> {
 
         project.initBaseGodot()
         project.ignores()
+
     }
 }
