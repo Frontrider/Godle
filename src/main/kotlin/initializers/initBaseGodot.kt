@@ -1,8 +1,7 @@
 package io.github.frontrider.godle.initializers
 
-import io.github.frontrider.godle.GodotFolder
+
 import io.github.frontrider.godle.dsl.GodleExtension
-import io.github.frontrider.godle.getGodotFolder
 import io.github.frontrider.godle.godleAddonsTaskName
 import io.github.frontrider.godle.tasks.GodotDownload
 import io.github.frontrider.godle.tasks.exec.GodotExec
@@ -62,7 +61,7 @@ internal fun Project.initBaseGodot() {
             }
         }
 
-        val storePath = "$GodotFolder/"
+        val storePath = "${extension.godotFolder}/"
         val godotAddonTask = tasks.create(godleAddonsTaskName) {
             with(it) {
                 description = "Download configured addons"
@@ -71,6 +70,7 @@ internal fun Project.initBaseGodot() {
         }
         val godotDownloadTask = tasks.create("godotDownload", GodotDownload::class.java) { download ->
             with(download) {
+                to.set(File("${extension.getGodotCache(extension.version.get())}/godot.zip"))
                 configureAsGodleInternal("Download the configured version of Godot.")
             }
         }
@@ -92,7 +92,7 @@ internal fun Project.initBaseGodot() {
                 from(zipTree(godotDownloadTask.to))
                 fileMode = 500
 
-                destinationDir = File(getGodotFolder(extension.version.get()))
+                destinationDir = File(extension.getGodotFolder(extension.version.get()))
             }
         }
 

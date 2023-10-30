@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.21.2"
+version = "0.21.13"
 
 repositories {
     mavenCentral()
@@ -55,8 +55,8 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation("commons-io:commons-io:2.11.0")
-    //downloader plugin.
-    implementation("fi.linuxbox.gradle:gradle-download:0.6")
+
+
 
     testImplementation(gradleTestKit())
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")

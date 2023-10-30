@@ -7,7 +7,7 @@ import io.github.frontrider.godle.dsl.GodleExtension
 
 var jvmPath:String? = null
 //kotlin/jvm support
-fun GodleExtension.`kotlin-jvm`(version: String, detectJVM: Boolean = true): GodotVersion {
+fun GodleExtension.`kotlin-jvm3`(version: String, detectJVM: Boolean = true): GodotVersion {
     return GodotVersion(
         version = version,
         cacheName = "v%version%-%bit%-kotlin",
@@ -54,11 +54,11 @@ fun GodleExtension.`kotlin-jvm`(version: String, detectJVM: Boolean = true): God
 /**
  * This variant exists for groovy.
  * */
-fun GodleExtension.kotlinJvm(version: String, detectJVM: Boolean = true): GodotVersion {
-    return `kotlin-jvm`(version, detectJVM)
+fun GodleExtension.kotlinJvm3(version: String, detectJVM: Boolean = true): GodotVersion {
+    return `kotlin-jvm3`(version, detectJVM)
 }
 
 
-infix fun GodleExtension.`asKotlin-jvm`(version: String) {
-    this.version.set(`kotlin-jvm`(version))
+infix fun GodleExtension.`asKotlin-jvm3`(version: String) {
+    this.version.set(`kotlin-jvm3`(version))
 }
