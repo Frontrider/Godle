@@ -26,36 +26,36 @@ internal fun Project.initBaseGodot() {
             }
         }
         //ignore the gradle wrapper's folder.
-        if (File(project.rootDir, "gradle/").exists()) {
-            val file = File(project.rootDir, "gradle/.gdignore")
+        if (File(project.projectDir, "gradle/").exists()) {
+            val file = File(project.projectDir, "gradle/.gdignore")
             if (!file.exists()) {
                 file.writeText("")
             }
         }
         //create runner scripts
         // Not in a task, to make it less cumbersome.
-        File(project.rootDir, "editor.sh").apply {
+        File(project.projectDir, "editor.sh").apply {
             if (!exists()) {
                 writeText(
                     "#!/bin/sh \n./gradlew godotEditor"
                 )
             }
         }
-        File(project.rootDir, "editor.bat").apply {
+        File(project.projectDir, "editor.bat").apply {
             if (!exists()) {
                 writeText(
                     "gradlew.bat godotEditor"
                 )
             }
         }
-        File(project.rootDir, "game.sh").apply {
+        File(project.projectDir, "game.sh").apply {
             if (!exists()) {
                 writeText(
                     "#!/bin/sh \n./gradlew godotRunGame"
                 )
             }
         }
-        File(project.rootDir, "game.bat").apply {
+        File(project.projectDir, "game.bat").apply {
             if (!exists()) {
                 writeText("call gradlew.bat godotRunGame")
             }
@@ -162,6 +162,44 @@ internal fun Project.initBaseGodot() {
                 dependsOn(godotDownloadTask)
                 dependsOn(godotExtractTask)
             }
+        }
+    }
+}
+
+private fun Project.generateQuickstartScripts(extension: GodleExtension) {
+    //ignore the gradle wrapper's folder.
+    if (File(project.rootDir, "gradle/").exists()) {
+        val file = File(project.rootDir, "gradle/.gdignore")
+        if (!file.exists()) {
+            file.writeText("")
+        }
+    }
+    //create runner scripts
+    // Not in a task, to make it less cumbersome.
+    File(project.rootDir, "editor.sh").apply {
+        if (!exists()) {
+            writeText(
+                "#!/bin/sh \n./gradlew godotEditor"
+            )
+        }
+    }
+    File(project.rootDir, "editor.bat").apply {
+        if (!exists()) {
+            writeText(
+                "gradlew.bat godotEditor"
+            )
+        }
+    }
+    File(project.rootDir, "game.sh").apply {
+        if (!exists()) {
+            writeText(
+                "#!/bin/sh \n./gradlew godotRunGame"
+            )
+        }
+    }
+    File(project.rootDir, "game.bat").apply {
+        if (!exists()) {
+            writeText("call gradlew.bat godotRunGame")
         }
     }
 }
