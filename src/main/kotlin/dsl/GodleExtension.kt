@@ -19,7 +19,7 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
         objectFactory.property(GodotVersion::class.java).convention(godot(DefaultGodotVersion))
 
     //the root where the godot project lives. Defaults to the root folder.
-    val godotRoot: RegularFileProperty = objectFactory.fileProperty().convention { project.rootDir }
+    val godotRoot: RegularFileProperty = objectFactory.fileProperty().convention { project.projectDir }
 
     val godotHome: Property<String> = objectFactory.property(String::class.java).convention(
         when {
