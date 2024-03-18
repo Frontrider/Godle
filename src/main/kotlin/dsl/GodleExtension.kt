@@ -65,6 +65,9 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
     //set it to true, to create a blank godot project in the godot root.
     var createBlankProject = true
 
+    /** When `true`, Godle will create several scripts to quickstart the Godot editor. */
+    var generateQuickstartScripts = true
+
     val env = HashMap<String, String>()
     fun env(key: String, value: String) {
         env[key] = value
