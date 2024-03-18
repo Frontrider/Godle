@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.frontrider.godle"
-version = "0.21.15"
+version = "0.22.0"
 
 repositories {
     mavenCentral()
