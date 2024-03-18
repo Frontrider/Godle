@@ -64,7 +64,12 @@ abstract class GodleExtension @Inject constructor(objectFactory: ObjectFactory, 
 
     //set it to true, to create a blank godot project in the godot root.
     var createBlankProject = true
-
+    /**
+     * If `true`, Godle tasks that open the Godot editor will depend on the global build task of the project. Use `false` to disable this dependency.
+     *
+     * **WARNING:** If the project doesn't build, outdated versions of bindings (e.g. `*.gdj` files) may be used by the editor.
+     */
+    var dependOnBuildTaskToOpeningEditor = true
     /** When `true`, Godle will create several scripts to quickstart the Godot editor. */
     var generateQuickstartScripts = true
 

@@ -96,18 +96,16 @@ internal fun Project.initBaseGodot() {
             }
         }
 
-        //IF a build task exists, then we depend on it.
-        //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided.
-        //THIS WILL BE TREATED AS A CONVENTION! IF the build task exists, then it will run!
+        // IF a build task exists, then we depend on it.
+        // The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided.
+        // THIS WILL BE TREATED AS A CONVENTION! IF the build task exists, then it will run!
         val build = tasks.findByPath("build")
 
         tasks.create("godotRunEditor", GodotExec::class.java) { exec ->
 
             with(exec) {
-                //IF a build task exists, then depend on it.
-                //The primary use of this is with Godot Kotlin/JVM, so the binaries are built and provided to godot.
-                //THIS WILL BE TREATED AS A CONVENTION! Anything running together with the build task, will be used!
-                if (build != null) {
+                // run the build command if it exists, and we are supposed to do so according to the configuration
+                if (build != null && extension.dependOnBuildTaskToOpeningEditor) {
                     this.dependsOn(build)
                 }
 
