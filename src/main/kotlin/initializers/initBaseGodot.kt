@@ -33,32 +33,10 @@ internal fun Project.initBaseGodot() {
             }
         }
         //create runner scripts
-        // Not in a task, to make it less cumbersome.
-        File(project.projectDir, "editor.sh").apply {
-            if (!exists()) {
-                writeText(
-                    "#!/bin/sh \n./gradlew godotEditor"
-                )
-            }
-        }
-        File(project.projectDir, "editor.bat").apply {
-            if (!exists()) {
-                writeText(
-                    "gradlew.bat godotEditor"
-                )
-            }
-        }
-        File(project.projectDir, "game.sh").apply {
-            if (!exists()) {
-                writeText(
-                    "#!/bin/sh \n./gradlew godotRunGame"
-                )
-            }
-        }
-        File(project.projectDir, "game.bat").apply {
-            if (!exists()) {
-                writeText("call gradlew.bat godotRunGame")
-            }
+        if(extension.generateQuickstartScripts){
+            // create runner scripts
+            // Not in a task, to make it less cumbersome.
+            this.generateQuickstartScripts()
         }
 
         val storePath = "${extension.godotFolder}/"
@@ -166,16 +144,7 @@ internal fun Project.initBaseGodot() {
     }
 }
 
-private fun Project.generateQuickstartScripts(extension: GodleExtension) {
-    //ignore the gradle wrapper's folder.
-    if (File(project.rootDir, "gradle/").exists()) {
-        val file = File(project.rootDir, "gradle/.gdignore")
-        if (!file.exists()) {
-            file.writeText("")
-        }
-    }
-    //create runner scripts
-    // Not in a task, to make it less cumbersome.
+private fun Project.generateQuickstartScripts() {
     File(project.rootDir, "editor.sh").apply {
         if (!exists()) {
             writeText(
