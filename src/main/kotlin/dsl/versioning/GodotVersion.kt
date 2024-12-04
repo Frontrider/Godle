@@ -30,12 +30,19 @@ data class GodotVersion(
     val majorVersion: MajorVersion = versionAsGodot3(),
     val bindingName:String = "extension_api.json",
     val headerName:String = "gdextension_interface.h",
+
+    val kotlinJvmVersion: String = "",
 ) {
     val cachedName:String = templateString(cacheName)
     fun templateString(input: String): String {
         return input
             .replace("%version%", version)
             .replace("%bit%", bit)
+            // godot-kotlin-JVM versions 0.10.0-4.3.0 and higher append
+            // the godot-kotlin-JVM version to the godot executable name (*argh*)
+            // For non-kotlin projects, this replacement will have no effect because
+            // the placeholder will not be present.
+            .replace("%kotlinJvmVersion%", this.kotlinJvmVersion)
     }
 
     fun getDownloadURL(): String {

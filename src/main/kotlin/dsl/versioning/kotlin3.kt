@@ -17,7 +17,8 @@ fun GodleExtension.`kotlin-jvm3`(version: String, detectJVM: Boolean = true): Go
         linuxBinary = "godot.x11.opt.tools.%bit%",
         windowsBinary = "godot.windows.opt.tools.%bit%.exe",
         macBinary = "godot.osx.opt.tools.%bit%",
-        isJava = true
+        isJava = true,
+        kotlinJvmVersion = version.substringBefore('-')
     )
 }
 
